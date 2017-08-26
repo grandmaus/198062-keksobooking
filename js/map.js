@@ -60,10 +60,17 @@ var getRandomArrayElement = function (array) {
   return element;
 };
 
-// функция фозврвщает массив случайной длины
+// функция для способа сортировки массива
+var sortRandom = function () {
+  return Math.random() - 0.5;
+};
+
+// функция фозвращает массив случайной длины
 var getRandomLengthArray = function (array) {
   var randomArray = [];
-  var randomLength = getRandomNumber(0, array.length);
+  var randomLength = getRandomNumber(1, array.length);
+
+  array.sort(sortRandom);
 
   for (var i = 0; i <= randomLength; i++) {
     randomArray.push(array[i]);
@@ -114,7 +121,7 @@ function getAdsArray(adCount) {
   var adArray = [];
 
   for (var i = 0; i < adCount; i++) {
-    adArray.push(getAd(i));
+    adArray.push(getAd());
   }
 
   return adArray;
@@ -145,14 +152,13 @@ var createPinFragment = function () {
   return fragment;
 };
 
-// вставляем фрагмент с маркерами на страницу
-pinsContainer.appendChild(createPinFragment());
-
 // выводим информацию об объявлении
 var insertInformation = function (ad) {
   var lodgeElement = lodgeTemplate.cloneNode(true);
   var lodgeFeatures = lodgeElement.querySelector('.lodge__features');
   var dialogPanel = offerDialog.querySelector('.dialog__panel');
+
+  // переменные для вставки информации об объявлении
   var userAvatar = offerDialog.querySelector('.dialog__title > img');
   var title = lodgeElement.querySelector('.lodge__title');
   var address = lodgeElement.querySelector('.lodge__address');
@@ -161,6 +167,8 @@ var insertInformation = function (ad) {
   var guests = lodgeElement.querySelector('.lodge__rooms-and-guests');
   var checkIn = lodgeElement.querySelector('.lodge__checkin-time');
   var description = lodgeElement.querySelector('.lodge__description');
+
+  // объект для перевода типов жилья на русский язык
   var typesRu = {
     flat: 'Квартира',
     house: 'Дом',
@@ -187,5 +195,8 @@ var insertInformation = function (ad) {
 };
 
 var adsArray = getAdsArray(adParameters.AD_COUNT);
+
+// вставляем фрагмент с маркерами на страницу
+pinsContainer.appendChild(createPinFragment());
 
 insertInformation(adsArray[0]);
