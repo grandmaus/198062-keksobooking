@@ -1,7 +1,7 @@
 'use strict';
 
-var ADVERTISEMENT_PARAMETERS = {
-  titles: [
+var adParameters = {
+  TITLES: [
     'Большая уютная квартира',
     'Маленькая неуютная квартира',
     'Огромный прекрасный дворец',
@@ -11,42 +11,36 @@ var ADVERTISEMENT_PARAMETERS = {
     'Уютное бунгало далеко от моря',
     'Неуютное бунгало по колено в воде'
   ],
-  types: [
+  TYPES: [
     'flat',
     'house',
     'bungalo'
   ],
-  typesRu: {
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало'
-  },
-  times: [
+  TIMES: [
     '12:00',
     '13:00',
     '14:00'
   ],
-  features: [
+  FEATURES: [
     'wifi',
     'dishwasher',
     'parking',
     'washer',
     'elevator',
     'conditioner'
-  ]
+  ],
+  AD_COUNT: 8,
+  GUESTS_MIN: 1,
+  GUESTS_MAX: 100,
+  MIN_PRICE: 1000,
+  MAX_PRICE: 1000000,
+  ROOMS_MIN: 1,
+  ROOMS_MAX: 5,
+  LOCATION_X_MIN: 300,
+  LOCATION_X_MAX: 900,
+  LOCATION_Y_MIN: 160,
+  LOCATION_Y_MAX: 500,
 };
-
-var ADVERTISEMENT_COUNT = 8;
-var GUESTS_MIN = 1;
-var GUESTS_MAX = 100;
-var MIN_PRICE = 1000;
-var MAX_PRICE = 1000000;
-var ROOMS_MIN = 1;
-var ROOMS_MAX = 5;
-var LOCATION_X_MIN = 300;
-var LOCATION_X_MAX = 900;
-var LOCATION_Y_MIN = 100;
-var LOCATION_Y_MAX = 500;
 
 // переменные для вывода информации на страницу
 var offerDialog = document.querySelector('#offer-dialog');
@@ -56,7 +50,7 @@ var pinTemplate = document.querySelector('.pin');
 
 // функция возвращает случайное целое число
 var getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min));
+  return Math.floor(Math.random() * (max - min) + min);
 };
 
 // функция возвращает случайный элемент массива. В параметр передаётся массив
@@ -66,38 +60,43 @@ var getRandomArrayElement = function (array) {
   return element;
 };
 
-// функция возвращает сгенерированный объект объявления
-var getRandomAdvertisement = function () {
-  var avatarIndex = getRandomNumber(0, ADVERTISEMENT_PARAMETERS.titles.length);
-  var avatarNumber = (avatarIndex + 1);
-  var locationX = getRandomNumber(LOCATION_X_MIN, LOCATION_X_MAX + 1);
-  var locationY = getRandomNumber(LOCATION_Y_MIN, LOCATION_Y_MAX + 1);
-  var price = getRandomNumber(MIN_PRICE, MAX_PRICE + 1);
-  var rooms = getRandomNumber(ROOMS_MIN, ROOMS_MAX + 1);
-  var guests = getRandomNumber(GUESTS_MIN, GUESTS_MAX + 1);
-  // задаю переменные для копирования участка массива методом slice
-  // randomFeaturesAmountFrom начало, randomFeaturesAmountTo конец.
-  // Они выбираются рандомно.
-  var randomFeaturesAmountFrom = getRandomNumber(1, ADVERTISEMENT_PARAMETERS.features.length + 1);
-  var randomFeaturesAmountTo = getRandomNumber(1, ADVERTISEMENT_PARAMETERS.features.length + 1);
-  var randomFeatures = (randomFeaturesAmountTo > randomFeaturesAmountFrom) ?
-    ADVERTISEMENT_PARAMETERS.features.slice(randomFeaturesAmountFrom, randomFeaturesAmountTo + 1) :
-    ADVERTISEMENT_PARAMETERS.features.slice(randomFeaturesAmountTo, randomFeaturesAmountFrom + 1);
+// функция фозврвщает массив случайной длины
+var getRandomLengthArray = function (array) {
+  var randomArray = [];
+  var randomLength = getRandomNumber(0, array.length);
 
-  var advertisement = {
+  for (var i = 0; i <= randomLength; i++) {
+    randomArray.push(array[i]);
+  }
+  return randomArray;
+};
+
+// функция возвращает сгенерированный объект объявления
+var getAd = function () {
+  var avatarIndex = getRandomNumber(0, adParameters.TITLES.length);
+  var avatarNumber = (avatarIndex + 1);
+  // если количество фотографий меньше 10 - добавляю 0 к номеру, если 10 и больше оставляю как есть
+  var avatarImage = avatarNumber < 10 ? 'img/avatars/user' + '0' + avatarNumber + '.png' : 'img/avatars/user' + avatarNumber + '.png';
+  var locationX = getRandomNumber(adParameters.LOCATION_X_MIN, adParameters.LOCATION_X_MAX + 1);
+  var locationY = getRandomNumber(adParameters.LOCATION_Y_MIN, adParameters.LOCATION_Y_MAX + 1);
+  var price = getRandomNumber(adParameters.MIN_PRICE, adParameters.MAX_PRICE + 1);
+  var rooms = getRandomNumber(adParameters.ROOMS_MIN, adParameters.ROOMS_MAX + 1);
+  var guests = getRandomNumber(adParameters.GUESTS_MIN, adParameters.GUESTS_MAX + 1);
+
+  var ad = {
     author: {
-      avatar: 'img/avatars/user' + '0' + avatarNumber + '.png'
+      avatar: avatarImage
     },
     offer: {
-      title: getRandomArrayElement(ADVERTISEMENT_PARAMETERS.titles),
-      address: locationX + ',' + locationY,
+      title: getRandomArrayElement(adParameters.TITLES),
+      address: locationX + ', ' + locationY,
       price: price,
-      type: getRandomArrayElement(ADVERTISEMENT_PARAMETERS.types),
+      type: getRandomArrayElement(adParameters.TYPES),
       rooms: rooms,
       guests: guests,
-      checkin: getRandomArrayElement(ADVERTISEMENT_PARAMETERS.times),
-      checkout: getRandomArrayElement(ADVERTISEMENT_PARAMETERS.times),
-      features: randomFeatures,
+      checkin: getRandomArrayElement(adParameters.TIMES),
+      checkout: getRandomArrayElement(adParameters.TIMES),
+      features: getRandomLengthArray(adParameters.FEATURES),
       description: '',
       photos: ''
     },
@@ -107,28 +106,28 @@ var getRandomAdvertisement = function () {
     }
   };
 
-  return advertisement;
+  return ad;
 };
 
 // функция возвращает массив объявлений
-function getAdvertisementsArray(advertisementCount) {
-  var advertisementItems = [];
+function getAdsArray(adCount) {
+  var adArray = [];
 
-  for (var i = 0; i < advertisementCount; i++) {
-    advertisementItems.push(getRandomAdvertisement(i));
+  for (var i = 0; i < adCount; i++) {
+    adArray.push(getAd(i));
   }
 
-  return advertisementItems;
+  return adArray;
 }
 
-var renderPin = function (advertisement) {
+var renderPin = function (ad) {
   var pinElement = pinTemplate.cloneNode(true);
   // по оси x отнимаем половину ширины, по оси y высоту, чтобы на координату указывал острый конец маркера
-  var pinCoordinateX = 'left: ' + (advertisement.location.x - pinTemplate.getAttribute('width') / 2) + 'px';
-  var pinCoordinateY = 'top: ' + (advertisement.location.y - pinTemplate.getAttribute('height')) + 'px';
+  var pinCoordinateX = 'left: ' + (ad.location.x - pinTemplate.clientWidth / 2) + 'px';
+  var pinCoordinateY = 'top: ' + (ad.location.y - pinTemplate.clientHeight) + 'px';
 
   pinElement.setAttribute('style', pinCoordinateX + '; ' + pinCoordinateY);
-  pinElement.querySelector('.rounded').setAttribute('src', advertisement.author.avatar);
+  pinElement.querySelector('.rounded').setAttribute('src', ad.author.avatar);
 
   return pinElement;
 };
@@ -138,8 +137,8 @@ var createPinFragment = function () {
   var fragment = document.createDocumentFragment();
   var randomPin;
 
-  for (var i = 0; i < ADVERTISEMENT_COUNT; i++) {
-    randomPin = getRandomAdvertisement();
+  for (var i = 0; i < adParameters.AD_COUNT; i++) {
+    randomPin = getAd();
     fragment.appendChild(renderPin(randomPin));
   }
 
@@ -150,31 +149,43 @@ var createPinFragment = function () {
 pinsContainer.appendChild(createPinFragment());
 
 // выводим информацию об объявлении
-var insertInformation = function (advertisement) {
+var insertInformation = function (ad) {
   var lodgeElement = lodgeTemplate.cloneNode(true);
   var lodgeFeatures = lodgeElement.querySelector('.lodge__features');
   var dialogPanel = offerDialog.querySelector('.dialog__panel');
   var userAvatar = offerDialog.querySelector('.dialog__title > img');
+  var title = lodgeElement.querySelector('.lodge__title');
+  var address = lodgeElement.querySelector('.lodge__address');
+  var price = lodgeElement.querySelector('.lodge__price');
+  var type = lodgeElement.querySelector('.lodge__type');
+  var guests = lodgeElement.querySelector('.lodge__rooms-and-guests');
+  var checkIn = lodgeElement.querySelector('.lodge__checkin-time');
+  var description = lodgeElement.querySelector('.lodge__description');
+  var typesRu = {
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало'
+  };
 
-  lodgeElement.querySelector('.lodge__title').textContent = advertisement.offer.title;
-  lodgeElement.querySelector('.lodge__address').textContent = advertisement.offer.address;
-  lodgeElement.querySelector('.lodge__price').textContent = advertisement.offer.price + ' \u20bd/ночь';
-  lodgeElement.querySelector('.lodge__type').textContent = ADVERTISEMENT_PARAMETERS.typesRu[advertisement.offer.type];
-  lodgeElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + advertisement.offer.guests + ' гостей в ' + advertisement.offer.rooms + ' комнатах';
-  lodgeElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;
-  lodgeElement.querySelector('.lodge__description').textContent = advertisement.offer.description;
+  title.textContent = ad.offer.title;
+  address.textContent = ad.offer.address;
+  price.textContent = ad.offer.price + ' \u20bd/ночь';
+  type.textContent = typesRu[ad.offer.type];
+  guests.textContent = 'Для ' + ad.offer.guests + ' гостей в ' + ad.offer.rooms + ' комнатах';
+  checkIn.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
+  description.textContent = ad.offer.description;
 
-  for (var i = 0; i < advertisement.offer.features.length; i++) {
+  for (var i = 0; i < ad.offer.features.length; i++) {
     var featureItem = document.createElement('span');
-    featureItem.classList.add('feature__image', 'feature__image--' + advertisement.offer.features[i]);
+    featureItem.classList.add('feature__image', 'feature__image--' + ad.offer.features[i]);
     lodgeFeatures.appendChild(featureItem);
   }
 
   offerDialog.replaceChild(lodgeElement, dialogPanel);
 
-  userAvatar.setAttribute('src', advertisement.author.avatar);
+  userAvatar.setAttribute('src', ad.author.avatar);
 };
 
-var advertisementsArray = getAdvertisementsArray(ADVERTISEMENT_COUNT);
+var adsArray = getAdsArray(adParameters.AD_COUNT);
 
-insertInformation(advertisementsArray[0]);
+insertInformation(adsArray[0]);
