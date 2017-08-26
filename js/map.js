@@ -68,9 +68,8 @@ var sortRandom = function () {
 // функция фозвращает массив случайной длины
 var getRandomLengthArray = function (array) {
   var randomArray = [];
-  var randomLength = getRandomNumber(1, array.length);
-
   array.sort(sortRandom);
+  var randomLength = getRandomNumber(1, array.length);
 
   for (var i = 0; i <= randomLength; i++) {
     randomArray.push(array[i]);
