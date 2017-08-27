@@ -62,15 +62,13 @@ var getRandomArrayElement = function (array) {
 
 
 // функция возвращает массив случайной длины с неповторяющимися элементами
-var getRandomLengthArray = function (array) {
+var getRandomLengthArray = function (array, length, unique) {
   var randomArray = [];
   var arrayElement;
-  var originality = true;
-  var randomLength = getRandomNumber(0, array.length + 1);
 
-  for (var i = 0; i <= randomLength; i++) {
+  while (randomArray.length < length) {
     arrayElement = array[getRandomNumber(0, array.length)];
-    if (originality && randomArray.indexOf(arrayElement) !== -1) {
+    if (unique && ~randomArray.indexOf(arrayElement)) {
       continue;
     } else {
       randomArray.push(arrayElement);
@@ -91,6 +89,7 @@ var getAd = function () {
   var price = getRandomNumber(adParameters.MIN_PRICE, adParameters.MAX_PRICE + 1);
   var rooms = getRandomNumber(adParameters.ROOMS_MIN, adParameters.ROOMS_MAX + 1);
   var guests = getRandomNumber(adParameters.GUESTS_MIN, adParameters.GUESTS_MAX + 1);
+  var featuresAmount = getRandomNumber(1, adParameters.FEATURES.length + 1);
 
   var ad = {
     author: {
@@ -105,7 +104,7 @@ var getAd = function () {
       guests: guests,
       checkin: getRandomArrayElement(adParameters.TIMES),
       checkout: getRandomArrayElement(adParameters.TIMES),
-      features: getRandomLengthArray(adParameters.FEATURES),
+      features: getRandomLengthArray(adParameters.FEATURES, featuresAmount, true),
       description: '',
       photos: ''
     },
