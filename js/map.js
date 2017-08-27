@@ -60,20 +60,23 @@ var getRandomArrayElement = function (array) {
   return element;
 };
 
-// функция для способа сортировки массива
-var sortRandom = function () {
-  return Math.random() - 0.5;
-};
 
-// функция фозвращает массив случайной длины
+// функция возвращает массив случайной длины с неповторяющимися элементами
 var getRandomLengthArray = function (array) {
   var randomArray = [];
-  array.sort(sortRandom);
-  var randomLength = getRandomNumber(1, array.length);
+  var arrayElement;
+  var originality = true;
+  var randomLength = getRandomNumber(0, array.length + 1);
 
   for (var i = 0; i <= randomLength; i++) {
-    randomArray.push(array[i]);
+    arrayElement = array[getRandomNumber(0, array.length)];
+    if (originality && randomArray.indexOf(arrayElement) !== -1) {
+      continue;
+    } else {
+      randomArray.push(arrayElement);
+    }
   }
+
   return randomArray;
 };
 
