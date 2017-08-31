@@ -42,11 +42,17 @@ var adParameters = {
   LOCATION_Y_MAX: 500,
 };
 
+var keyCodes = {
+  ESC: 27,
+  ENTER: 13
+};
+
 // переменные для вывода информации на страницу
 var offerDialog = document.querySelector('#offer-dialog');
 var lodgeTemplate = document.querySelector('#lodge-template').content;
 var pinsContainer = document.querySelector('.tokyo__pin-map');
-var pinTemplate = document.querySelector('.pin');
+var pinTemplate = document.querySelector('#pin-template').content;
+var dialogClose = offerDialog.querySelector('.dialog__close');
 
 // функция возвращает случайное целое число
 var getRandomNumber = function (min, max) {
@@ -79,9 +85,8 @@ var getRandomLengthArray = function (array, length, unique) {
 };
 
 // функция возвращает сгенерированный объект объявления
-var getAd = function () {
-  var avatarIndex = getRandomNumber(0, adParameters.TITLES.length);
-  var avatarNumber = (avatarIndex + 1);
+var getAd = function (index) {
+  var avatarNumber = (index + 1);
   // если количество фотографий меньше 10 - добавляю 0 к номеру, если 10 и больше оставляю как есть
   var avatarImage = avatarNumber < 10 ? 'img/avatars/user' + '0' + avatarNumber + '.png' : 'img/avatars/user' + avatarNumber + '.png';
   var locationX = getRandomNumber(adParameters.LOCATION_X_MIN, adParameters.LOCATION_X_MAX + 1);
@@ -122,20 +127,27 @@ function getAdsArray(adCount) {
   var adArray = [];
 
   for (var i = 0; i < adCount; i++) {
-    adArray.push(getAd());
+    adArray.push(getAd(i));
   }
 
   return adArray;
 }
 
 var renderPin = function (ad) {
-  var pinElement = pinTemplate.cloneNode(true);
+  var pinFragment = pinTemplate.cloneNode(true);
+  var pinElement = pinFragment.querySelector('.pin');
+  // размеры метки
+  var pinWidth = 56;
+  var pinHeight = 75;
   // по оси x отнимаем половину ширины, по оси y высоту, чтобы на координату указывал острый конец маркера
-  var pinCoordinateX = 'left: ' + (ad.location.x - pinTemplate.clientWidth / 2) + 'px';
-  var pinCoordinateY = 'top: ' + (ad.location.y - pinTemplate.clientHeight) + 'px';
+  var pinCoordinateX = 'left: ' + (ad.location.x - pinWidth / 2) + 'px';
+  var pinCoordinateY = 'top: ' + (ad.location.y - pinHeight) + 'px';
+  // аватарка пина
+  var pinImage = pinElement.querySelector('.rounded');
 
   pinElement.setAttribute('style', pinCoordinateX + '; ' + pinCoordinateY);
-  pinElement.querySelector('.rounded').setAttribute('src', ad.author.avatar);
+  pinImage.setAttribute('src', ad.author.avatar);
+  pinElement.setAttribute('tabindex', '0');
 
   return pinElement;
 };
@@ -143,18 +155,35 @@ var renderPin = function (ad) {
 // функция возвращает фрагмент с DOM нодами маркеров
 var createPinFragment = function () {
   var fragment = document.createDocumentFragment();
-  var randomPin;
 
-  for (var i = 0; i < adParameters.AD_COUNT; i++) {
-    randomPin = getAd();
-    fragment.appendChild(renderPin(randomPin));
-  }
+  adsArray.forEach(function (ad) {
+    fragment.appendChild(createPin(ad));
+  });
 
   return fragment;
 };
 
+// добавляет обработчики на пины
+var pinHandlersAdd = function (pin, ad) {
+  pin.addEventListener('click', function (evt) {
+    pinClickHandler(evt, ad);
+  });
+
+  pin.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === keyCodes.ENTER) {
+      pinClickHandler(evt, ad);
+    }
+  });
+};
+
+var createPin = function (ad) {
+  var pin = renderPin(ad);
+  pinHandlersAdd(pin, ad);
+  return pin;
+};
+
 // выводим информацию об объявлении
-var insertInformation = function (ad) {
+var insertAdInformation = function (ad) {
   var lodgeElement = lodgeTemplate.cloneNode(true);
   var lodgeFeatures = lodgeElement.querySelector('.lodge__features');
   var dialogPanel = offerDialog.querySelector('.dialog__panel');
@@ -197,7 +226,72 @@ var insertInformation = function (ad) {
 
 var adsArray = getAdsArray(adParameters.AD_COUNT);
 
+// module4
+
+// переменные для событий
+var dialog = document.querySelector('#offer-dialog');
+
+// функция деактивирует пин
+var deactivatePin = function () {
+  var pinActive = document.querySelector('.pin--active');
+
+  if (pinActive) {
+    pinActive.classList.remove('pin--active');
+  }
+};
+
+var dialogEnterCloseHandler = function (evt) {
+  if (evt.keyCode === keyCodes.ENTER) {
+    dialogCloseHandler();
+  }
+};
+
+var dialogEscCloseHandler = function (evt) {
+  if (evt.keyCode === keyCodes.ESC) {
+    dialogCloseHandler();
+  }
+};
+
+var pinClickHandler = function (evt, ad) {
+  deactivatePin();
+  insertAdInformation(ad);
+  evt.currentTarget.classList.add('pin--active');
+  showDialog();
+};
+
+var dialogAddListeners = function () {
+  dialogClose.addEventListener('click', dialogCloseHandler);
+  dialogClose.addEventListener('keydown', dialogEnterCloseHandler);
+  document.addEventListener('keydown', dialogEscCloseHandler);
+};
+
+var dialogRemoveListeners = function () {
+  dialogClose.removeEventListener('click', dialogCloseHandler);
+  dialogClose.removeEventListener('keydown', dialogEnterCloseHandler);
+  document.removeEventListener('keydown', dialogEscCloseHandler);
+};
+
+var dialogCloseHandler = function () {
+  hideDialog();
+  deactivatePin();
+};
+
+// добавляет попапу класс hidden
+var hideDialog = function () {
+  dialog.classList.add('hidden');
+  dialogRemoveListeners();
+};
+
+// убирает у попапа класс hidden
+var showDialog = function () {
+  dialog.classList.remove('hidden');
+  dialogAddListeners();
+};
+
+// добавляю диалогу обработчики закрытия
+dialogAddListeners();
+
 // вставляем фрагмент с маркерами на страницу
 pinsContainer.appendChild(createPinFragment());
 
-insertInformation(adsArray[0]);
+insertAdInformation(adsArray[0]);
