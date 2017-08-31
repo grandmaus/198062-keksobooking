@@ -226,11 +226,6 @@ var insertAdInformation = function (ad) {
 
 var adsArray = getAdsArray(adParameters.AD_COUNT);
 
-// вставляем фрагмент с маркерами на страницу
-pinsContainer.appendChild(createPinFragment());
-
-insertAdInformation(adsArray[0]);
-
 // module4
 
 // переменные для событий
@@ -259,8 +254,8 @@ var dialogEscCloseHandler = function (evt) {
 
 var pinClickHandler = function (evt, ad) {
   deactivatePin();
-  evt.currentTarget.classList.add('pin--active');
   insertAdInformation(ad);
+  evt.currentTarget.classList.add('pin--active');
   showDialog();
 };
 
@@ -292,3 +287,11 @@ var showDialog = function () {
   dialog.classList.remove('hidden');
   dialogAddListeners();
 };
+
+// добавляю диалогу обработчики закрытия
+dialogAddListeners();
+
+// вставляем фрагмент с маркерами на страницу
+pinsContainer.appendChild(createPinFragment());
+
+insertAdInformation(adsArray[0]);
