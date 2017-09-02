@@ -47,6 +47,20 @@ var keyCodes = {
   ENTER: 13
 };
 
+var TYPES_PRICE = {
+  flat: 1000,
+  bungalo: 0,
+  house: 5000,
+  palace: 10000
+};
+
+var ROOMS_CAPACITY_MAP = {
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0']
+};
+
 // переменные для вывода информации на страницу
 var offerDialog = document.querySelector('#offer-dialog');
 var lodgeTemplate = document.querySelector('#lodge-template').content;
@@ -231,6 +245,18 @@ var adsArray = getAdsArray(adParameters.AD_COUNT);
 // переменные для событий
 var dialog = document.querySelector('#offer-dialog');
 
+// перемнные для валидации формы
+var form = document.querySelector('.notice__form');
+var adTitleField = form.querySelector('#title');
+var adAddressField = form.querySelector('#address');
+var adPriceField = form.querySelector('#price');
+var adTimeinField = form.querySelector('#timein');
+var adTimeoutField = form.querySelector('#timeout');
+var adTypeField = form.querySelector('#type');
+var adRoomField = form.querySelector('#room_number');
+var adCapacityField = form.querySelector('#capacity');
+var adCapacityOptions = adCapacityField.querySelectorAll('option');
+
 // функция деактивирует пин
 var deactivatePin = function () {
   var pinActive = document.querySelector('.pin--active');
@@ -287,6 +313,71 @@ var showDialog = function () {
   dialog.classList.remove('hidden');
   dialogAddListeners();
 };
+
+// валидация формы
+
+// массив обязательных полей
+var requiredFields = [adTitleField, adAddressField, adPriceField];
+
+var validationHandler = function (field) {
+  field.addEventListener('invalid', function () {
+    if (!field.validity.valid) {
+      field.style.borderColor = 'red';
+    }
+  });
+};
+
+// функция для связывания времени заезда/выезда
+var getAssociateTime = function (currentSelect, changedSelect) {
+  currentSelect.addEventListener('change', function (evt) {
+    changedSelect.value = evt.target.value;
+  });
+};
+
+// функция для связывания типа жилья и цены
+var getAssociatePrice = function (currentField, changedField) {
+  currentField.addEventListener('change', function (evt) {
+    if (evt.target.value === 'flat') {
+      changedField.setAttribute('min', TYPES_PRICE.flat);
+      changedField.setAttribute('value', TYPES_PRICE.flat);
+    } else if (evt.target.value === 'bungalo') {
+      changedField.setAttribute('min', TYPES_PRICE.bungalo);
+      changedField.setAttribute('value', TYPES_PRICE.bungalo);
+    } else if (evt.target.value === 'house') {
+      changedField.setAttribute('min', TYPES_PRICE.house);
+      changedField.setAttribute('value', TYPES_PRICE.house);
+    } else if (evt.target.value === 'palace') {
+      changedField.setAttribute('min', TYPES_PRICE.palace);
+      changedField.setAttribute('value', TYPES_PRICE.palace);
+    }
+  });
+};
+
+var getAssociateCapacity = function () {
+  adRoomField.addEventListener('change', function (evt) {
+    for (var i = 0; i < adCapacityOptions.length; i++) {
+      var value = adCapacityOptions[i].value;
+      var currentValue = evt.target.value;
+      if (ROOMS_CAPACITY_MAP[currentValue].indexOf(value) === -1) {
+        adCapacityOptions[i].setAttribute('disabled', '');
+      } else {
+        adCapacityOptions[i].removeAttribute('disabled', '');
+      }
+    }
+  });
+};
+
+getAssociateCapacity();
+
+// добавляю обработчик каждому обязательному полю
+requiredFields.forEach(function (field) {
+  validationHandler(field);
+});
+
+getAssociateTime(adTimeinField, adTimeoutField);
+getAssociateTime(adTimeoutField, adTimeinField);
+
+getAssociatePrice(adTypeField, adPriceField);
 
 // добавляю диалогу обработчики закрытия
 dialogAddListeners();
