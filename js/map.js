@@ -255,7 +255,7 @@ var adTimeoutField = form.querySelector('#timeout');
 var adTypeField = form.querySelector('#type');
 var adRoomField = form.querySelector('#room_number');
 var adCapacityField = form.querySelector('#capacity');
-var adCapacityOptions = adCapacityField.querySelectorAll('option');
+var optionsArray = adCapacityField.querySelectorAll('option');
 
 // функция деактивирует пин
 var deactivatePin = function () {
@@ -316,68 +316,87 @@ var showDialog = function () {
 
 // валидация формы
 
-// массив обязательных полей
-var requiredFields = [adTitleField, adAddressField, adPriceField];
+// функция добавляет класс invalid невалидным полям
+var invalidFormHandler = function (evt) {
+  var target = evt.target;
 
-var validationHandler = function (field) {
-  field.addEventListener('invalid', function () {
-    if (!field.validity.valid) {
-      field.style.borderColor = 'red';
-    }
+  target.classList.add('invalid');
+};
+
+// функция убирает класс invalid с валидных полей, если inputValid === true
+var validInputHandler = function (field) {
+  var inputValid = field.validity.valid;
+
+  if (inputValid) {
+    field.classList.remove('invalid');
+  }
+};
+
+var addFormValidationHandler = function () {
+  form.addEventListener('invalid', invalidFormHandler, true);
+  adTitleField.addEventListener('input', function () {
+    validInputHandler(adTitleField);
+  });
+  adAddressField.addEventListener('input', function () {
+    validInputHandler(adAddressField);
+  });
+  adPriceField.addEventListener('input', function () {
+    validInputHandler(adPriceField);
   });
 };
 
 // функция для связывания времени заезда/выезда
-var getAssociateTime = function (currentSelect, changedSelect) {
+var getAssociateTime = function (changedSelect, target) {
+  changedSelect.value = target.value;
+};
+
+// функция добавляет обработчик полям времени заезда/выезда
+var addTimeFieldsHandler = function (currentSelect, changedSelect) {
   currentSelect.addEventListener('change', function (evt) {
-    changedSelect.value = evt.target.value;
+    var target = evt.target;
+    getAssociateTime(changedSelect, target);
   });
 };
 
 // функция для связывания типа жилья и цены
 var getAssociatePrice = function (currentField, changedField) {
   currentField.addEventListener('change', function (evt) {
-    if (evt.target.value === 'flat') {
-      changedField.setAttribute('min', TYPES_PRICE.flat);
-      changedField.setAttribute('value', TYPES_PRICE.flat);
-    } else if (evt.target.value === 'bungalo') {
-      changedField.setAttribute('min', TYPES_PRICE.bungalo);
-      changedField.setAttribute('value', TYPES_PRICE.bungalo);
-    } else if (evt.target.value === 'house') {
-      changedField.setAttribute('min', TYPES_PRICE.house);
-      changedField.setAttribute('value', TYPES_PRICE.house);
-    } else if (evt.target.value === 'palace') {
-      changedField.setAttribute('min', TYPES_PRICE.palace);
-      changedField.setAttribute('value', TYPES_PRICE.palace);
+    var value = evt.target.value;
+    if (value === 'flat') {
+      changedField.setAttribute('min', TYPES_PRICE[value]);
+      changedField.setAttribute('value', TYPES_PRICE[value]);
+    } else if (value === 'bungalo') {
+      changedField.setAttribute('min', TYPES_PRICE[value]);
+      changedField.setAttribute('value', TYPES_PRICE[value]);
+    } else if (value === 'house') {
+      changedField.setAttribute('min', TYPES_PRICE[value]);
+      changedField.setAttribute('value', TYPES_PRICE[value]);
+    } else if (value === 'palace') {
+      changedField.setAttribute('min', TYPES_PRICE[value]);
+      changedField.setAttribute('value', TYPES_PRICE[value]);
     }
   });
 };
 
+// функция для связывания количества комнат и гостей
 var getAssociateCapacity = function () {
   adRoomField.addEventListener('change', function (evt) {
-    for (var i = 0; i < adCapacityOptions.length; i++) {
-      var value = adCapacityOptions[i].value;
-      var currentValue = evt.target.value;
-      if (ROOMS_CAPACITY_MAP[currentValue].indexOf(value) === -1) {
-        adCapacityOptions[i].setAttribute('disabled', '');
-      } else {
-        adCapacityOptions[i].removeAttribute('disabled', '');
-      }
+    var currentValue = evt.target.value;
+    for (var i = 0; i < optionsArray.length; i++) {
+      var value = optionsArray[i].value;
+      // если элемент не найден, то disabled = true
+      optionsArray[i].disabled = !(~ROOMS_CAPACITY_MAP[currentValue].indexOf(value));
     }
   });
 };
 
-getAssociateCapacity();
-
-// добавляю обработчик каждому обязательному полю
-requiredFields.forEach(function (field) {
-  validationHandler(field);
-});
-
-getAssociateTime(adTimeinField, adTimeoutField);
-getAssociateTime(adTimeoutField, adTimeinField);
-
-getAssociatePrice(adTypeField, adPriceField);
+var getFormListeners = function () {
+  addFormValidationHandler();
+  addTimeFieldsHandler(adTimeinField, adTimeoutField);
+  addTimeFieldsHandler(adTimeoutField, adTimeinField);
+  getAssociateCapacity();
+  getAssociatePrice(adTypeField, adPriceField);
+};
 
 // добавляю диалогу обработчики закрытия
 dialogAddListeners();
@@ -386,3 +405,5 @@ dialogAddListeners();
 pinsContainer.appendChild(createPinFragment());
 
 insertAdInformation(adsArray[0]);
+
+getFormListeners();

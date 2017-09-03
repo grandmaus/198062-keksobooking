@@ -665,3 +665,7 @@ select option:hover {
 .rounded {
     border-radius: 50%;
 }
+
+input.invalid {
+  border-color: red;
+}
