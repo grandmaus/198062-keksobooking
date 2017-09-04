@@ -316,66 +316,36 @@ var showDialog = function () {
 
 // валидация формы
 
-// функция добавляет класс invalid невалидным полям
-var invalidFormHandler = function (evt) {
+// функция переключает класс invalid
+// В переменную inputValid я записал !target.validity.valid,
+// чтобы в случае валидного поля возвращалось false
+// и передал эту переменную вторым аргументом в тоггл.
+
+var validationInputHandler = function (evt) {
   var target = evt.target;
+  var inputValid = !target.validity.valid;
 
-  target.classList.add('invalid');
+  target.classList.toggle('invalid', inputValid);
 };
 
-// функция убирает класс invalid с валидных полей, если inputValid === true
-var validInputHandler = function (field) {
-  var inputValid = field.validity.valid;
+var addFormValidationHandlers = function () {
+  form.addEventListener('invalid', validationInputHandler, true);
 
-  if (inputValid) {
-    field.classList.remove('invalid');
-  }
+  adTitleField.addEventListener('input', validationInputHandler);
+  adAddressField.addEventListener('input', validationInputHandler);
+  adPriceField.addEventListener('input', validationInputHandler);
 };
 
-var addFormValidationHandler = function () {
-  form.addEventListener('invalid', invalidFormHandler, true);
-  adTitleField.addEventListener('input', function () {
-    validInputHandler(adTitleField);
-  });
-  adAddressField.addEventListener('input', function () {
-    validInputHandler(adAddressField);
-  });
-  adPriceField.addEventListener('input', function () {
-    validInputHandler(adPriceField);
-  });
+// обработчик для связывания времени заезда/выезда
+var associateTimeHandler = function (currentSelect, changedSelect) {
+  changedSelect.value = currentSelect.value;
 };
 
-// функция для связывания времени заезда/выезда
-var getAssociateTime = function (changedSelect, target) {
-  changedSelect.value = target.value;
-};
-
-// функция добавляет обработчик полям времени заезда/выезда
-var addTimeFieldsHandler = function (currentSelect, changedSelect) {
-  currentSelect.addEventListener('change', function (evt) {
-    var target = evt.target;
-    getAssociateTime(changedSelect, target);
-  });
-};
-
-// функция для связывания типа жилья и цены
-var getAssociatePrice = function (currentField, changedField) {
-  currentField.addEventListener('change', function (evt) {
-    var value = evt.target.value;
-    if (value === 'flat') {
-      changedField.setAttribute('min', TYPES_PRICE[value]);
-      changedField.setAttribute('value', TYPES_PRICE[value]);
-    } else if (value === 'bungalo') {
-      changedField.setAttribute('min', TYPES_PRICE[value]);
-      changedField.setAttribute('value', TYPES_PRICE[value]);
-    } else if (value === 'house') {
-      changedField.setAttribute('min', TYPES_PRICE[value]);
-      changedField.setAttribute('value', TYPES_PRICE[value]);
-    } else if (value === 'palace') {
-      changedField.setAttribute('min', TYPES_PRICE[value]);
-      changedField.setAttribute('value', TYPES_PRICE[value]);
-    }
-  });
+// обработчик для связывания типа жилья и цены
+var associatePriceHandler = function (currentField, changedField) {
+  var value = currentField.value;
+  changedField.setAttribute('min', TYPES_PRICE[value]);
+  changedField.setAttribute('value', TYPES_PRICE[value]);
 };
 
 // функция для связывания количества комнат и гостей
@@ -390,12 +360,23 @@ var getAssociateCapacity = function () {
   });
 };
 
+// добавляю обработчики формы и полей
 var getFormListeners = function () {
-  addFormValidationHandler();
-  addTimeFieldsHandler(adTimeinField, adTimeoutField);
-  addTimeFieldsHandler(adTimeoutField, adTimeinField);
+  addFormValidationHandlers();
+
+  adTimeinField.addEventListener('change', function () {
+    associateTimeHandler(adTimeinField, adTimeoutField);
+  });
+
+  adTimeoutField.addEventListener('change', function () {
+    associateTimeHandler(adTimeoutField, adTimeinField);
+  });
+
+  adTypeField.addEventListener('change', function () {
+    associatePriceHandler(adTypeField, adPriceField);
+  });
+
   getAssociateCapacity();
-  getAssociatePrice(adTypeField, adPriceField);
 };
 
 // добавляю диалогу обработчики закрытия
