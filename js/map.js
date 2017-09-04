@@ -344,6 +344,7 @@ var associateTimeHandler = function (currentSelect, changedSelect) {
 // обработчик для связывания типа жилья и цены
 var associatePriceHandler = function (currentField, changedField) {
   var value = currentField.value;
+
   changedField.setAttribute('min', TYPES_PRICE[value]);
   changedField.setAttribute('value', TYPES_PRICE[value]);
 };
@@ -352,6 +353,7 @@ var associatePriceHandler = function (currentField, changedField) {
 var getAssociateCapacity = function () {
   adRoomField.addEventListener('change', function (evt) {
     var currentValue = evt.target.value;
+
     for (var i = 0; i < optionsArray.length; i++) {
       var value = optionsArray[i].value;
       // если элемент не найден, то disabled = true
