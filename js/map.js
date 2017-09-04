@@ -317,15 +317,11 @@ var showDialog = function () {
 // валидация формы
 
 // функция переключает класс invalid
-// В переменную inputValid я записал !target.validity.valid,
+// Вторым аргументом в тоггл передал !target.validity.valid,
 // чтобы в случае валидного поля возвращалось false
-// и передал эту переменную вторым аргументом в тоггл.
 
 var validationInputHandler = function (evt) {
-  var target = evt.target;
-  var inputValid = !target.validity.valid;
-
-  target.classList.toggle('invalid', inputValid);
+  evt.target.classList.toggle('invalid', !evt.target.validity.valid);
 };
 
 var addFormValidationHandlers = function () {
@@ -343,14 +339,11 @@ var associateTimeHandler = function (currentSelect, changedSelect) {
 
 // обработчик для связывания типа жилья и цены
 var associatePriceHandler = function (currentField, changedField) {
-  var value = currentField.value;
-
-  changedField.setAttribute('min', TYPES_PRICE[value]);
-  changedField.setAttribute('value', TYPES_PRICE[value]);
+  changedField.min = TYPES_PRICE[currentField.value];
 };
 
 // функция для связывания количества комнат и гостей
-var getAssociateCapacity = function () {
+var associateCapacityHandler = function () {
   adRoomField.addEventListener('change', function (evt) {
     var currentValue = evt.target.value;
 
@@ -363,7 +356,7 @@ var getAssociateCapacity = function () {
 };
 
 // добавляю обработчики формы и полей
-var getFormListeners = function () {
+var addFormListeners = function () {
   addFormValidationHandlers();
 
   adTimeinField.addEventListener('change', function () {
@@ -378,7 +371,7 @@ var getFormListeners = function () {
     associatePriceHandler(adTypeField, adPriceField);
   });
 
-  getAssociateCapacity();
+  associateCapacityHandler();
 };
 
 // добавляю диалогу обработчики закрытия
@@ -389,4 +382,4 @@ pinsContainer.appendChild(createPinFragment());
 
 insertAdInformation(adsArray[0]);
 
-getFormListeners();
+addFormListeners();
