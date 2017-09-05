@@ -320,6 +320,7 @@ var showDialog = function () {
 // Если поле валидно, !target.validity.valid возвращает false
 
 var validationInputHandler = function (evt) {
+  evt.preventDefault();
   evt.target.classList.toggle('invalid', !evt.target.validity.valid);
 };
 
@@ -350,6 +351,7 @@ var associateCapacityHandler = function () {
       var value = optionsArray[i].value;
       // если элемент не найден, то disabled = true
       optionsArray[i].disabled = !(~ROOMS_CAPACITY_MAP[currentValue].indexOf(value));
+      optionsArray[i].selected = (~ROOMS_CAPACITY_MAP[currentValue].indexOf(value));
     }
   });
 };
