@@ -47,7 +47,7 @@ var keyCodes = {
   ENTER: 13
 };
 
-var TYPES_PRICE = {
+var PRICE_TYPES = {
   flat: 1000,
   bungalo: 0,
   house: 5000,
@@ -317,8 +317,7 @@ var showDialog = function () {
 // валидация формы
 
 // функция переключает класс invalid
-// Вторым аргументом в тоггл передал !target.validity.valid,
-// чтобы в случае валидного поля возвращалось false
+// Если поле валидно, !target.validity.valid возвращает false
 
 var validationInputHandler = function (evt) {
   evt.target.classList.toggle('invalid', !evt.target.validity.valid);
@@ -339,7 +338,7 @@ var associateTimeHandler = function (currentSelect, changedSelect) {
 
 // обработчик для связывания типа жилья и цены
 var associatePriceHandler = function (currentField, changedField) {
-  changedField.min = TYPES_PRICE[currentField.value];
+  changedField.min = PRICE_TYPES[currentField.value];
 };
 
 // функция для связывания количества комнат и гостей
