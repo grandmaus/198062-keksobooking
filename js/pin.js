@@ -29,7 +29,7 @@
     });
 
     pin.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.data.keyCodes.ENTER) {
+      if (evt.keyCode === window.util.keyCodes.ENTER) {
         pinClickHandler(evt, ad);
       }
     });
@@ -43,21 +43,20 @@
 
   var pinClickHandler = function (evt, ad) {
     window.pin.deactivatePin();
-    window.card.insertAdInformation(ad);
     evt.currentTarget.classList.add('pin--active');
-    window.dialog.showDialog();
+    window.card.showDialog(ad);
   };
-
-  var adsArray = window.card.getAdsArray(window.data.adParameters.AD_COUNT);
 
   window.pin = {
     // функция возвращает фрагмент с DOM нодами маркеров
     createPinFragment: function () {
       var fragment = document.createDocumentFragment();
+      var randomPin;
 
-      adsArray.forEach(function (ad) {
-        fragment.appendChild(createPin(ad));
-      });
+      for (var i = 0; i < window.data.adParameters.AD_COUNT; i++) {
+        randomPin = window.data.getAd(i);
+        fragment.appendChild(createPin(randomPin));
+      }
 
       return fragment;
     },

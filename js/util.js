@@ -31,6 +31,11 @@ window.util = (function () {
       }
 
       return randomArray;
+    },
+
+    keyCodes: {
+      ESC: 27,
+      ENTER: 13
     }
   };
 })();

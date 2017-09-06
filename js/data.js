@@ -45,25 +45,6 @@ window.data = (function () {
       LOCATION_Y_MAX: 500,
     },
 
-    keyCodes: {
-      ESC: 27,
-      ENTER: 13
-    },
-
-    PRICE_TYPES: {
-      flat: 1000,
-      bungalo: 0,
-      house: 5000,
-      palace: 10000
-    },
-
-    ROOMS_CAPACITY_MAP: {
-      1: ['1'],
-      2: ['1', '2'],
-      3: ['1', '2', '3'],
-      100: ['0']
-    },
-
     // функция возвращает сгенерированный объект объявления
     getAd: function (index) {
       var avatarNumber = (index + 1);

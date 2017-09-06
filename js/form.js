@@ -13,6 +13,21 @@
   var adCapacityField = form.querySelector('#capacity');
   var optionsArray = adCapacityField.querySelectorAll('option');
 
+  // объекты соответствия для полей формы
+  var PRICE_TYPES = {
+    flat: 1000,
+    bungalo: 0,
+    house: 5000,
+    palace: 10000
+  };
+
+  var ROOMS_CAPACITY_MAP = {
+    1: ['1'],
+    2: ['1', '2'],
+    3: ['1', '2', '3'],
+    100: ['0']
+  };
+
   // функция переключает класс invalid
   // Если поле валидно, !target.validity.valid возвращает false
   var validationInputHandler = function (evt) {
@@ -35,7 +50,7 @@
 
   // обработчик для связывания типа жилья и цены
   var associatePriceHandler = function (currentField, changedField) {
-    changedField.min = window.data.PRICE_TYPES[currentField.value];
+    changedField.min = PRICE_TYPES[currentField.value];
   };
 
   // функция для связывания количества комнат и гостей
@@ -46,8 +61,8 @@
       for (var i = 0; i < optionsArray.length; i++) {
         var value = optionsArray[i].value;
         // если элемент не найден, то disabled = true
-        optionsArray[i].disabled = !(~window.data.ROOMS_CAPACITY_MAP[currentValue].indexOf(value));
-        optionsArray[i].selected = (~window.data.ROOMS_CAPACITY_MAP[currentValue].indexOf(value));
+        optionsArray[i].disabled = !(~ROOMS_CAPACITY_MAP[currentValue].indexOf(value));
+        optionsArray[i].selected = (~ROOMS_CAPACITY_MAP[currentValue].indexOf(value));
       }
     });
   };

@@ -5,8 +5,4 @@
 
   // вставляем фрагмент с маркерами на страницу
   pinsContainer.appendChild(window.pin.createPinFragment());
-
-  var adsArray = window.card.getAdsArray(window.data.adParameters.AD_COUNT);
-
-  window.card.insertAdInformation(adsArray[0]);
 })();
