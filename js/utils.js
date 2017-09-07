@@ -1,8 +1,23 @@
 'use strict';
 
-window.util = (function () {
+(function () {
+  var keyCodes = {
+    ESC: 27,
+    ENTER: 13
+  };
 
-  return {
+  window.utils = {
+    isEscEvent: function (evt, action) {
+      if (evt.keyCode === keyCodes.ESC) {
+        action();
+      }
+    },
+    isEnterEvent: function (evt, action) {
+      if (evt.keyCode === keyCodes.ENTER) {
+        action();
+      }
+    },
+
     // функция возвращает случайное целое число
     getRandomNumber: function (min, max) {
       return Math.floor(Math.random() * (max - min) + min);
@@ -33,9 +48,5 @@ window.util = (function () {
       return randomArray;
     },
 
-    keyCodes: {
-      ESC: 27,
-      ENTER: 13
-    }
   };
 })();

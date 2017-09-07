@@ -49,15 +49,11 @@
   };
 
   var dialogEnterCloseHandler = function (evt) {
-    if (evt.keyCode === window.util.keyCodes.ENTER) {
-      dialogCloseHandler();
-    }
+    window.utils.isEnterEvent(evt, dialogCloseHandler);
   };
 
   var dialogEscCloseHandler = function (evt) {
-    if (evt.keyCode === window.util.keyCodes.ESC) {
-      dialogCloseHandler();
-    }
+    window.utils.isEscEvent(evt, dialogCloseHandler);
   };
 
   var dialogAddListeners = function () {
@@ -74,7 +70,7 @@
 
   var dialogCloseHandler = function () {
     hideDialog();
-    window.pin.deactivatePin();
+    window.pins.deactivatePin();
   };
 
   // добавляет попапу класс hidden
@@ -87,7 +83,7 @@
 
   window.card = {
     // убирает у попапа класс hidden
-    showDialog: function (ad) {
+    show: function (ad) {
       offerDialog.classList.remove('hidden');
       dialogAddListeners();
       insertAdInformation(ad);

@@ -29,9 +29,9 @@
     });
 
     pin.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.util.keyCodes.ENTER) {
+      window.utils.isEnterEvent(evt, function () {
         pinClickHandler(evt, ad);
-      }
+      });
     });
   };
 
@@ -42,18 +42,18 @@
   };
 
   var pinClickHandler = function (evt, ad) {
-    window.pin.deactivatePin();
+    window.pins.deactivatePin();
     evt.currentTarget.classList.add('pin--active');
-    window.card.showDialog(ad);
+    window.card.show(ad);
   };
 
-  window.pin = {
+  window.pins = {
     // функция возвращает фрагмент с DOM нодами маркеров
     createPinFragment: function () {
       var fragment = document.createDocumentFragment();
       var randomPin;
 
-      for (var i = 0; i < window.data.adParameters.AD_COUNT; i++) {
+      for (var i = 0; i < window.data.AD_COUNT; i++) {
         randomPin = window.data.getAd(i);
         fragment.appendChild(createPin(randomPin));
       }
