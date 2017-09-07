@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.form = (function () {
   // перемнные для валидации формы
   var form = document.querySelector('.notice__form');
   var titleField = form.querySelector('#title');

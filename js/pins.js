@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.pins = (function () {
   var pinTemplate = document.querySelector('#pin-template').content;
 
   var renderPin = function (ad) {
@@ -47,7 +47,7 @@
     window.card.show(ad);
   };
 
-  window.pins = {
+  return {
     // функция возвращает фрагмент с DOM нодами маркеров
     createPinFragment: function () {
       var fragment = document.createDocumentFragment();

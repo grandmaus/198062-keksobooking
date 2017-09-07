@@ -1,12 +1,12 @@
 'use strict';
 
-(function () {
+window.utils = (function () {
   var keyCodes = {
     ESC: 27,
     ENTER: 13
   };
 
-  window.utils = {
+  return {
     isEscEvent: function (evt, action) {
       if (evt.keyCode === keyCodes.ESC) {
         action();
@@ -46,7 +46,6 @@
       }
 
       return randomArray;
-    },
-
+    }
   };
 })();
