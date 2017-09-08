@@ -1,6 +1,6 @@
 'use strict';
 
-window.pins = (function () {
+window.pin = (function () {
   var pinTemplate = document.querySelector('#pin-template').content;
 
   var renderPin = function (ad) {
@@ -29,36 +29,23 @@ window.pins = (function () {
     });
 
     pin.addEventListener('keydown', function (evt) {
-      window.utils.isEnterEvent(evt, function () {
+      if (window.utils.isEnterEvent(evt.keyCode)) {
         pinClickHandler(evt, ad);
-      });
+      }
     });
   };
 
-  var createPin = function (ad) {
-    var pin = renderPin(ad);
-    pinHandlersAdd(pin, ad);
-    return pin;
-  };
-
   var pinClickHandler = function (evt, ad) {
-    window.pins.deactivatePin();
+    window.pin.deactivatePin();
     evt.currentTarget.classList.add('pin--active');
     window.card.show(ad);
   };
 
   return {
-    // функция возвращает фрагмент с DOM нодами маркеров
-    createPinFragment: function () {
-      var fragment = document.createDocumentFragment();
-      var randomPin;
-
-      for (var i = 0; i < window.data.AD_COUNT; i++) {
-        randomPin = window.data.getAd(i);
-        fragment.appendChild(createPin(randomPin));
-      }
-
-      return fragment;
+    createPin: function (ad) {
+      var pin = renderPin(ad);
+      pinHandlersAdd(pin, ad);
+      return pin;
     },
 
     // функция деактивирует пин

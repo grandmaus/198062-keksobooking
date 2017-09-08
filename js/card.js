@@ -49,11 +49,15 @@ window.card = (function () {
   };
 
   var dialogEnterCloseHandler = function (evt) {
-    window.utils.isEnterEvent(evt, dialogCloseHandler);
+    if (window.utils.isEnterEvent(evt.keyCode)) {
+      dialogCloseHandler();
+    }
   };
 
   var dialogEscCloseHandler = function (evt) {
-    window.utils.isEscEvent(evt, dialogCloseHandler);
+    if (window.utils.isEscEvent(evt.keyCode)) {
+      dialogCloseHandler();
+    }
   };
 
   var dialogAddListeners = function () {
@@ -70,7 +74,7 @@ window.card = (function () {
 
   var dialogCloseHandler = function () {
     hideDialog();
-    window.pins.deactivatePin();
+    window.pin.deactivatePin();
   };
 
   // добавляет попапу класс hidden

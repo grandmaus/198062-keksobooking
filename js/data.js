@@ -1,6 +1,12 @@
 'use strict';
 
 window.data = (function () {
+  var mapCoordinate = {
+    LOCATION_X_MIN: 300,
+    LOCATION_X_MAX: 900,
+    LOCATION_Y_MIN: 160,
+    LOCATION_Y_MAX: 500,
+  };
 
   return {
     adParameters: {
@@ -39,19 +45,14 @@ window.data = (function () {
       ROOMS_MIN: 1,
       ROOMS_MAX: 5,
     },
-    AD_COUNT: 8,
-    LOCATION_X_MIN: 300,
-    LOCATION_X_MAX: 900,
-    LOCATION_Y_MIN: 160,
-    LOCATION_Y_MAX: 500,
 
     // функция возвращает сгенерированный объект объявления
     getAd: function (index) {
       var avatarNumber = (index + 1);
       // если количество фотографий меньше 10 - добавляю 0 к номеру, если 10 и больше оставляю как есть
       var avatarImage = avatarNumber < 10 ? 'img/avatars/user0' + avatarNumber + '.png' : 'img/avatars/user' + avatarNumber + '.png';
-      var locationX = window.utils.getRandomNumber(this.LOCATION_X_MIN, this.LOCATION_X_MAX + 1);
-      var locationY = window.utils.getRandomNumber(this.LOCATION_Y_MIN, this.LOCATION_Y_MAX + 1);
+      var locationX = window.utils.getRandomNumber(mapCoordinate.LOCATION_X_MIN, mapCoordinate.LOCATION_X_MAX + 1);
+      var locationY = window.utils.getRandomNumber(mapCoordinate.LOCATION_Y_MIN, mapCoordinate.LOCATION_Y_MAX + 1);
       var price = window.utils.getRandomNumber(this.adParameters.MIN_PRICE, this.adParameters.MAX_PRICE + 1);
       var rooms = window.utils.getRandomNumber(this.adParameters.ROOMS_MIN, this.adParameters.ROOMS_MAX + 1);
       var guests = window.utils.getRandomNumber(this.adParameters.GUESTS_MIN, this.adParameters.GUESTS_MAX + 1);

@@ -7,15 +7,11 @@ window.utils = (function () {
   };
 
   return {
-    isEscEvent: function (evt, action) {
-      if (evt.keyCode === keyCodes.ESC) {
-        action();
-      }
+    isEscEvent: function (keyCode) {
+      return keyCode === keyCodes.ESC;
     },
-    isEnterEvent: function (evt, action) {
-      if (evt.keyCode === keyCodes.ENTER) {
-        action();
-      }
+    isEnterEvent: function (keyCode) {
+      return keyCode === keyCodes.ENTER;
     },
 
     // функция возвращает случайное целое число
