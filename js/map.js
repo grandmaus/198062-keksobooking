@@ -5,8 +5,6 @@ window.map = (function () {
 
   var map = document.querySelector('.tokyo');
   var pinsContainer = map.querySelector('.tokyo__pin-map');
-  // var header = document.querySelector('.header');
-  // var filter = map.querySelector('.tokyo__filters-container');
   var pinMain = map.querySelector('.pin__main');
   var addressField = document.querySelector('#address');
 
