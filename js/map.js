@@ -39,8 +39,8 @@ window.map = (function () {
       };
 
       // высоты хедера и панели с фильтром
-      var headerHeight = 71;
-      var filterPanelHeight = 46;
+      var HEADER_HEIGHT = 71;
+      var FILTER_PANEL_HEIGHT = 46;
 
       // при каждом движении мыши обновляем координаты пина
       var shift = {
@@ -50,8 +50,8 @@ window.map = (function () {
 
       var maxCoordinateX = map.clientWidth - pinSizes.WIDTH / 2;
       var minCoordinateX = 0 - pinSizes.WIDTH / 2;
-      var maxCoordinateY = map.clientHeight - pinSizes.HEIGHT - filterPanelHeight;
-      var minCoordinateY = 0 + headerHeight;
+      var maxCoordinateY = map.clientHeight - pinSizes.HEIGHT - FILTER_PANEL_HEIGHT;
+      var minCoordinateY = 0 + HEADER_HEIGHT;
 
       var pinY = pinMain.offsetTop - shift.y;
       var pinX = pinMain.offsetLeft - shift.x;
