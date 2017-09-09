@@ -5,8 +5,8 @@ window.map = (function () {
 
   var map = document.querySelector('.tokyo');
   var pinsContainer = map.querySelector('.tokyo__pin-map');
-  var header = document.querySelector('.header');
-  var filter = map.querySelector('.tokyo__filters-container');
+  // var header = document.querySelector('.header');
+  // var filter = map.querySelector('.tokyo__filters-container');
   var pinMain = map.querySelector('.pin__main');
   var addressField = document.querySelector('#address');
 
@@ -34,19 +34,26 @@ window.map = (function () {
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
+      // размеры пина
+      var pinSizes = {
+        WIDTH: 75,
+        HEIGHT: 94
+      };
+
+      // высоты хедера и панели с фильтром
+      var headerHeight = 71;
+      var filterPanelHeight = 46;
+
       // при каждом движении мыши обновляем координаты пина
       var shift = {
         x: startCoordinates.x - moveEvt.clientX,
         y: startCoordinates.y - moveEvt.clientY
       };
 
-      var mapMaxWidth = map.clientWidth;
-      var mapMaxHeight = map.clientHeight;
-
-      var maxCoordinateX = mapMaxWidth - pinMain.clientWidth / 2;
-      var minCoordinateX = 0 - pinMain.clientWidth / 2;
-      var maxCoordinateY = mapMaxHeight - pinMain.clientHeight - filter.clientHeight;
-      var minCoordinateY = 0 + header.clientHeight;
+      var maxCoordinateX = map.clientWidth - pinSizes.WIDTH / 2;
+      var minCoordinateX = 0 - pinSizes.WIDTH / 2;
+      var maxCoordinateY = map.clientHeight - pinSizes.HEIGHT - filterPanelHeight;
+      var minCoordinateY = 0 + headerHeight;
 
       var pinY = pinMain.offsetTop - shift.y;
       var pinX = pinMain.offsetLeft - shift.x;
@@ -55,11 +62,14 @@ window.map = (function () {
       var checkCoordinates = function () {
         if (pinX > maxCoordinateX) {
           pinX = maxCoordinateX;
-        } else if (pinX < minCoordinateX) {
+        }
+        if (pinX < minCoordinateX) {
           pinX = minCoordinateX;
-        } else if (pinY > maxCoordinateY) {
+        }
+        if (pinY > maxCoordinateY) {
           pinY = maxCoordinateY;
-        } else if (pinY < minCoordinateY) {
+        }
+        if (pinY < minCoordinateY) {
           pinY = minCoordinateY;
         }
       };
@@ -75,8 +85,8 @@ window.map = (function () {
       pinMain.style.top = pinY + 'px';
       pinMain.style.left = pinX + 'px';
 
-      var valueX = pinX + pinMain.clientWidth / 2;
-      var valueY = pinY + pinMain.clientHeight;
+      var valueX = pinX + pinSizes.WIDTH / 2;
+      var valueY = pinY + pinSizes.HEIGHT;
 
       addressField.value = 'x: ' + valueX + ', y: ' + valueY;
     };
@@ -90,9 +100,9 @@ window.map = (function () {
 
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
-  });
 
-  addressField.setAttribute('readonly', '');
+    addressField.setAttribute('readonly', '');
+  });
 
   // вставляем фрагмент с маркерами на страницу
   pinsContainer.appendChild(createPinFragment());
