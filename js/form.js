@@ -50,25 +50,25 @@ window.form = (function () {
   };
 
   // обработчик для синхронизации значений полей
-  var syncFieldHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
-    changedField.value = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
+  var associateFieldHandler = function (currentField, changedField, currentFieldArray) {
+    changedField.value = currentFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // обработчик для связывания типа жилья и цены
-  var associatePriceHandler = function (currentField, changedField) {
-    changedField.min = PRICE_TYPES[currentField.value];
+  var associatePriceHandler = function (currentField, changedField, currentFieldArray) {
+    changedField.min = currentFieldArray[currentField.value];
   };
 
   // функция для связывания количества комнат и гостей
-  var associateCapacityHandler = function () {
-    roomField.addEventListener('change', function (evt) {
+  var associateCapacityHandler = function (currentField, changedField, currentFieldArray) {
+    currentField.addEventListener('change', function (evt) {
       var currentValue = evt.target.value;
 
       for (var i = 0; i < optionsArray.length; i++) {
-        var value = optionsArray[i].value;
+        var value = changedField[i].value;
         // если элемент не найден, то disabled = true
-        optionsArray[i].disabled = !~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
-        optionsArray[i].selected = ~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
+        changedField[i].disabled = !~currentFieldArray[currentValue].indexOf(value);
+        changedField[i].selected = ~currentFieldArray[currentValue].indexOf(value);
       }
     });
   };
@@ -78,12 +78,12 @@ window.form = (function () {
     addFormValidationHandlers();
   };
 
-  associateCapacityHandler();
+  associateCapacityHandler(roomField, optionsArray, ROOMS_CAPACITY_MAP);
 
-  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
-  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
-  window.synchronizeFields(typeField, priceField, PRICE_TYPES, PRICE_TYPES, associatePriceHandler);
-  window.synchronizeFields(roomField, capacityField, ROOMS_CAPACITY_MAP, ROOMS_CAPACITY_MAP, associateCapacityHandler);
+  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, associateFieldHandler);
+  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, associateFieldHandler);
+  window.synchronizeFields(typeField, priceField, PRICE_TYPES, associatePriceHandler);
+  window.synchronizeFields(roomField, optionsArray, ROOMS_CAPACITY_MAP, associateCapacityHandler);
 
   addFormListeners();
 })();
