@@ -50,8 +50,8 @@ window.form = (function () {
   };
 
   // обработчик для синхронизации значений полей
-  var associateFieldHandler = function (currentField, changedField, currentFieldArray) {
-    changedField.value = currentFieldArray[currentFieldArray.indexOf(currentField.value)];
+  var associateFieldHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
+    changedField.value = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // обработчик для связывания типа жилья и цены
@@ -80,10 +80,10 @@ window.form = (function () {
 
   associateCapacityHandler(roomField, optionsArray, ROOMS_CAPACITY_MAP);
 
-  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, associateFieldHandler);
-  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, associateFieldHandler);
-  window.synchronizeFields(typeField, priceField, PRICE_TYPES, associatePriceHandler);
-  window.synchronizeFields(roomField, optionsArray, ROOMS_CAPACITY_MAP, associateCapacityHandler);
+  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
+  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
+  window.synchronizeFields(typeField, priceField, PRICE_TYPES, PRICE_TYPES, associatePriceHandler);
+  window.synchronizeFields(roomField, optionsArray, ROOMS_CAPACITY_MAP, ROOMS_CAPACITY_MAP, associateCapacityHandler);
 
   addFormListeners();
 })();
