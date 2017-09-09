@@ -60,15 +60,15 @@ window.form = (function () {
   };
 
   // функция для связывания количества комнат и гостей
-  var associateCapacityHandler = function (currentField, changedField, currentFieldArray) {
-    currentField.addEventListener('change', function (evt) {
+  var associateCapacityHandler = function () {
+    roomField.addEventListener('change', function (evt) {
       var currentValue = evt.target.value;
 
       for (var i = 0; i < optionsArray.length; i++) {
-        var value = changedField[i].value;
+        var value = optionsArray[i].value;
         // если элемент не найден, то disabled = true
-        changedField[i].disabled = !~currentFieldArray[currentValue].indexOf(value);
-        changedField[i].selected = ~currentFieldArray[currentValue].indexOf(value);
+        optionsArray[i].disabled = !~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
+        optionsArray[i].selected = ~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
       }
     });
   };
@@ -78,12 +78,12 @@ window.form = (function () {
     addFormValidationHandlers();
   };
 
-  associateCapacityHandler(roomField, optionsArray, ROOMS_CAPACITY_MAP);
+  associateCapacityHandler();
 
   window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
   window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
   window.synchronizeFields(typeField, priceField, PRICE_TYPES, PRICE_TYPES, associatePriceHandler);
-  window.synchronizeFields(roomField, optionsArray, ROOMS_CAPACITY_MAP, ROOMS_CAPACITY_MAP, associateCapacityHandler);
+  window.synchronizeFields(roomField, capacityField, ROOMS_CAPACITY_MAP, ROOMS_CAPACITY_MAP, associateCapacityHandler);
 
   addFormListeners();
 })();
