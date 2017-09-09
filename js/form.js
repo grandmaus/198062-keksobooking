@@ -28,6 +28,12 @@ window.form = (function () {
     100: ['0']
   };
 
+  var TIME_VALUES = [
+    '12:00',
+    '13:00',
+    '14:00'
+  ];
+
   // функция переключает класс invalid
   // Если поле валидно, !target.validity.valid возвращает false
   var validationInputHandler = function (evt) {
@@ -43,9 +49,9 @@ window.form = (function () {
     priceField.addEventListener('input', validationInputHandler);
   };
 
-  // обработчик для связывания времени заезда/выезда
-  var associateTimeHandler = function (currentSelect, changedSelect) {
-    changedSelect.value = currentSelect.value;
+  // обработчик для синхронизации значений полей
+  var syncFieldHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
+    changedField.value = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // обработчик для связывания типа жилья и цены
@@ -70,21 +76,14 @@ window.form = (function () {
   // добавляю обработчики формы и полей
   var addFormListeners = function () {
     addFormValidationHandlers();
-
-    timeinField.addEventListener('change', function () {
-      associateTimeHandler(timeinField, timeoutField);
-    });
-
-    timeoutField.addEventListener('change', function () {
-      associateTimeHandler(timeoutField, timeinField);
-    });
-
-    typeField.addEventListener('change', function () {
-      associatePriceHandler(typeField, priceField);
-    });
-
-    associateCapacityHandler();
   };
+
+  associateCapacityHandler();
+
+  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
+  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
+  window.synchronizeFields(typeField, priceField, PRICE_TYPES, PRICE_TYPES, associatePriceHandler);
+  window.synchronizeFields(roomField, capacityField, ROOMS_CAPACITY_MAP, ROOMS_CAPACITY_MAP, associateCapacityHandler);
 
   addFormListeners();
 })();

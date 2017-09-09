@@ -7,11 +7,11 @@ window.utils = (function () {
   };
 
   return {
-    isEscEvent: function (keyCode) {
+    isEscPress: function (keyCode) {
       return keyCode === keyCodes.ESC;
     },
 
-    isEnterEvent: function (keyCode) {
+    isEnterPress: function (keyCode) {
       return keyCode === keyCodes.ENTER;
     },
 
