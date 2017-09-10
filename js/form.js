@@ -13,13 +13,20 @@ window.form = (function () {
   var capacityField = form.querySelector('#capacity');
   var optionsArray = capacityField.querySelectorAll('option');
 
-  // объекты соответствия для полей формы
-  var PRICE_TYPES = {
-    flat: 1000,
-    bungalo: 0,
-    house: 5000,
-    palace: 10000
-  };
+  // объекты соответствия и массивы значений для полей формы
+  var TYPES = [
+    'flat',
+    'bungalo',
+    'house',
+    'palace'
+  ];
+
+  var PRICES = [
+    '1000',
+    '0',
+    '5000',
+    '10000'
+  ];
 
   var ROOMS_CAPACITY_MAP = {
     1: ['1'],
@@ -55,8 +62,8 @@ window.form = (function () {
   };
 
   // обработчик для связывания типа жилья и цены
-  var associatePriceHandler = function (currentField, changedField, currentFieldArray) {
-    changedField.min = currentFieldArray[currentField.value];
+  var associatePriceHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
+    changedField.min = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // функция для связывания количества комнат и гостей
@@ -76,14 +83,14 @@ window.form = (function () {
   // добавляю обработчики формы и полей
   var addFormListeners = function () {
     addFormValidationHandlers();
+
+    associateCapacityHandler();
   };
 
-  associateCapacityHandler();
 
   window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
   window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
-  window.synchronizeFields(typeField, priceField, PRICE_TYPES, PRICE_TYPES, associatePriceHandler);
-  window.synchronizeFields(roomField, capacityField, ROOMS_CAPACITY_MAP, ROOMS_CAPACITY_MAP, associateCapacityHandler);
+  window.synchronizeFields(typeField, priceField, TYPES, PRICES, associatePriceHandler);
 
   addFormListeners();
 })();
