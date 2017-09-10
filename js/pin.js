@@ -29,7 +29,7 @@ window.pin = (function () {
     });
 
     pin.addEventListener('keydown', function (evt) {
-      if (window.utils.isEnterEvent(evt.keyCode)) {
+      if (window.utils.isEnterPressed(evt.keyCode)) {
         pinClickHandler(evt, ad);
       }
     });

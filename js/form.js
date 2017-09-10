@@ -13,13 +13,20 @@ window.form = (function () {
   var capacityField = form.querySelector('#capacity');
   var optionsArray = capacityField.querySelectorAll('option');
 
-  // объекты соответствия для полей формы
-  var PRICE_TYPES = {
-    flat: 1000,
-    bungalo: 0,
-    house: 5000,
-    palace: 10000
-  };
+  // объекты соответствия и массивы значений для полей формы
+  var TYPE_VALUES = [
+    'flat',
+    'bungalo',
+    'house',
+    'palace'
+  ];
+
+  var PRICE_VALUES = [
+    '1000',
+    '0',
+    '5000',
+    '10000'
+  ];
 
   var ROOMS_CAPACITY_MAP = {
     1: ['1'],
@@ -27,6 +34,12 @@ window.form = (function () {
     3: ['1', '2', '3'],
     100: ['0']
   };
+
+  var TIME_VALUES = [
+    '12:00',
+    '13:00',
+    '14:00'
+  ];
 
   // функция переключает класс invalid
   // Если поле валидно, !target.validity.valid возвращает false
@@ -43,18 +56,18 @@ window.form = (function () {
     priceField.addEventListener('input', validationInputHandler);
   };
 
-  // обработчик для связывания времени заезда/выезда
-  var associateTimeHandler = function (currentSelect, changedSelect) {
-    changedSelect.value = currentSelect.value;
+  // обработчик для синхронизации значений полей
+  var syncFieldHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
+    changedField.value = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // обработчик для связывания типа жилья и цены
-  var associatePriceHandler = function (currentField, changedField) {
-    changedField.min = PRICE_TYPES[currentField.value];
+  var syncPriceHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
+    changedField.min = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // функция для связывания количества комнат и гостей
-  var associateCapacityHandler = function () {
+  var syncCapacityHandler = function () {
     roomField.addEventListener('change', function (evt) {
       var currentValue = evt.target.value;
 
@@ -71,20 +84,12 @@ window.form = (function () {
   var addFormListeners = function () {
     addFormValidationHandlers();
 
-    timeinField.addEventListener('change', function () {
-      associateTimeHandler(timeinField, timeoutField);
-    });
-
-    timeoutField.addEventListener('change', function () {
-      associateTimeHandler(timeoutField, timeinField);
-    });
-
-    typeField.addEventListener('change', function () {
-      associatePriceHandler(typeField, priceField);
-    });
-
-    associateCapacityHandler();
+    syncCapacityHandler();
   };
+
+  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
+  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
+  window.synchronizeFields(typeField, priceField, TYPE_VALUES, PRICE_VALUES, syncPriceHandler);
 
   addFormListeners();
 })();

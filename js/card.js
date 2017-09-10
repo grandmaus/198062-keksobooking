@@ -49,13 +49,13 @@ window.card = (function () {
   };
 
   var dialogEnterCloseHandler = function (evt) {
-    if (window.utils.isEnterEvent(evt.keyCode)) {
+    if (window.utils.isEnterPressed(evt.keyCode)) {
       dialogCloseHandler();
     }
   };
 
   var dialogEscCloseHandler = function (evt) {
-    if (window.utils.isEscEvent(evt.keyCode)) {
+    if (window.utils.isEscPressed(evt.keyCode)) {
       dialogCloseHandler();
     }
   };
