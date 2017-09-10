@@ -87,7 +87,6 @@ window.form = (function () {
     associateCapacityHandler();
   };
 
-
   window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
   window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
   window.synchronizeFields(typeField, priceField, TYPES, PRICES, associatePriceHandler);
