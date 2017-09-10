@@ -80,12 +80,41 @@ window.form = (function () {
     });
   };
 
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.className = 'error-message';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  var succesHandler = function () {
+    var invalidFields = form.querySelectorAll('.invalid');
+
+    for (var i = 0; i < invalidFields.length; i++) {
+      var field = invalidFields[i];
+
+      field.classList.remove('invalid');
+      priceField.min = '0';
+    }
+
+    form.reset();
+  };
+
+  var submitFormHandler = function (evt) {
+    evt.preventDefault();
+
+    window.backend.save(new FormData(form), succesHandler, errorHandler);
+  };
+
   // добавляю обработчики формы и полей
   var addFormListeners = function () {
     addFormValidationHandlers();
 
     syncCapacityHandler();
   };
+
+  form.addEventListener('submit', submitFormHandler);
 
   window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
   window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
