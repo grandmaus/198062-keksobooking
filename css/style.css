@@ -684,3 +684,7 @@ input.invalid {
   color: #ffffff;
   box-shadow: 0 0 10px 0 #000000;
 }
+
+input[name = address] {
+  pointer-events: none;
+}

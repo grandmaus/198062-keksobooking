@@ -10,12 +10,10 @@ window.map = (function () {
   // функция возвращает фрагмент с DOM нодами маркеров
   var createPinFragment = function (array) {
     var fragment = document.createDocumentFragment();
-    var pinElement;
 
-    for (var i = 0; i < array.length; i++) {
-      pinElement = array[i];
-      fragment.appendChild(window.pin.createPin(pinElement));
-    }
+    array.forEach(function (pin) {
+      fragment.appendChild(window.pin.createPin(pin));
+    });
 
     return fragment;
   };
@@ -97,8 +95,6 @@ window.map = (function () {
 
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
-
-    addressField.setAttribute('readonly', '');
   });
 
   var errorHandler = function (errorMessage) {

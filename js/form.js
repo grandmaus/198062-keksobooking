@@ -95,8 +95,9 @@ window.form = (function () {
       var field = invalidFields[i];
 
       field.classList.remove('invalid');
-      priceField.min = '0';
     }
+
+    priceField.min = 0;
 
     form.reset();
   };
@@ -111,10 +112,11 @@ window.form = (function () {
   var addFormListeners = function () {
     addFormValidationHandlers();
 
+    form.addEventListener('submit', submitFormHandler);
+
     syncCapacityHandler();
   };
 
-  form.addEventListener('submit', submitFormHandler);
 
   window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
   window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
