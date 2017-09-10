@@ -14,14 +14,14 @@ window.form = (function () {
   var optionsArray = capacityField.querySelectorAll('option');
 
   // объекты соответствия и массивы значений для полей формы
-  var TYPES = [
+  var TYPE_VALUES = [
     'flat',
     'bungalo',
     'house',
     'palace'
   ];
 
-  var PRICES = [
+  var PRICE_VALUES = [
     '1000',
     '0',
     '5000',
@@ -57,17 +57,17 @@ window.form = (function () {
   };
 
   // обработчик для синхронизации значений полей
-  var associateFieldHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
+  var syncFieldHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
     changedField.value = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // обработчик для связывания типа жилья и цены
-  var associatePriceHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
+  var syncPriceHandler = function (currentField, changedField, currentFieldArray, changedFieldArray) {
     changedField.min = changedFieldArray[currentFieldArray.indexOf(currentField.value)];
   };
 
   // функция для связывания количества комнат и гостей
-  var associateCapacityHandler = function () {
+  var syncCapacityHandler = function () {
     roomField.addEventListener('change', function (evt) {
       var currentValue = evt.target.value;
 
@@ -84,12 +84,12 @@ window.form = (function () {
   var addFormListeners = function () {
     addFormValidationHandlers();
 
-    associateCapacityHandler();
+    syncCapacityHandler();
   };
 
-  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
-  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, associateFieldHandler);
-  window.synchronizeFields(typeField, priceField, TYPES, PRICES, associatePriceHandler);
+  window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
+  window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
+  window.synchronizeFields(typeField, priceField, TYPE_VALUES, PRICE_VALUES, syncPriceHandler);
 
   addFormListeners();
 })();
