@@ -667,5 +667,24 @@ select option:hover {
 }
 
 input.invalid {
-  border-color: red;
+  border-color: #ff0000;
+}
+
+.error-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 555;
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  text-transform: uppercase;
+  text-align: center;
+  background-color: #ff0000;
+  color: #ffffff;
+  box-shadow: 0 0 10px 0 #000000;
+}
+
+input[name = address] {
+  pointer-events: none;
 }

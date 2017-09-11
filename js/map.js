@@ -1,7 +1,6 @@
 'use strict';
 
 window.map = (function () {
-  var AD_COUNT = 8;
 
   var map = document.querySelector('.tokyo');
   var pinsContainer = map.querySelector('.tokyo__pin-map');
@@ -9,14 +8,12 @@ window.map = (function () {
   var addressField = document.querySelector('#address');
 
   // функция возвращает фрагмент с DOM нодами маркеров
-  var createPinFragment = function () {
+  var createPinFragment = function (array) {
     var fragment = document.createDocumentFragment();
-    var randomPin;
 
-    for (var i = 0; i < AD_COUNT; i++) {
-      randomPin = window.data.getAd(i);
-      fragment.appendChild(window.pin.createPin(randomPin));
-    }
+    array.forEach(function (pin) {
+      fragment.appendChild(window.pin.createPin(pin));
+    });
 
     return fragment;
   };
@@ -98,10 +95,19 @@ window.map = (function () {
 
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
-
-    addressField.setAttribute('readonly', '');
   });
 
-  // вставляем фрагмент с маркерами на страницу
-  pinsContainer.appendChild(createPinFragment());
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.className = 'error-message';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  var succesHandler = function (offers) {
+    pinsContainer.appendChild(createPinFragment(offers));
+  };
+
+  window.backend.load(succesHandler, errorHandler);
 })();
