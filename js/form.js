@@ -71,12 +71,12 @@ window.form = (function () {
     roomField.addEventListener('change', function (evt) {
       var currentValue = evt.target.value;
 
-      for (var i = 0; i < optionsArray.length; i++) {
-        var value = optionsArray[i].value;
+      [].forEach.call(optionsArray, function (element) {
+        var value = element.value;
         // если элемент не найден, то disabled = true
-        optionsArray[i].disabled = !~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
-        optionsArray[i].selected = ~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
-      }
+        element.disabled = !~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
+        element.selected = ~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
+      });
     });
   };
 
@@ -91,11 +91,9 @@ window.form = (function () {
   var succesHandler = function () {
     var invalidFields = form.querySelectorAll('.invalid');
 
-    for (var i = 0; i < invalidFields.length; i++) {
-      var field = invalidFields[i];
-
-      field.classList.remove('invalid');
-    }
+    [].forEach.call(invalidFields, function (element) {
+      element.classList.remove('invalid');
+    });
 
     priceField.min = 0;
 
