@@ -94,7 +94,7 @@ window.map = (function () {
   };
 
   var successHandler = function (offers) {
-    window.filters.updatePins(offers);
+    window.filters(offers);
   };
 
   window.backend.load(successHandler, errorHandler);
