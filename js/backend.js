@@ -7,7 +7,7 @@ window.backend = (function () {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    var StatusMap = {
+    var StatusesMap = {
       '200': function () {
         onLoad(xhr.response);
       },
@@ -30,7 +30,7 @@ window.backend = (function () {
     };
 
     xhr.addEventListener('load', function () {
-      (StatusMap[xhr.status] || StatusMap['default'])();
+      (StatusesMap[xhr.status] || StatusesMap['default'])();
     });
 
     xhr.addEventListener('error', function () {

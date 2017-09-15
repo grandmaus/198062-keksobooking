@@ -1,10 +1,19 @@
 'use strict';
 
 window.map = (function () {
-
   var map = document.querySelector('.tokyo');
   var pinMain = map.querySelector('.pin__main');
   var addressField = document.querySelector('#address');
+
+  // размеры пина
+  var pinSizes = {
+    WIDTH: 75,
+    HEIGHT: 94
+  };
+
+  // высоты хедера и панели с фильтром
+  var HEADER_HEIGHT = 71;
+  var FILTER_PANEL_HEIGHT = 46;
 
   pinMain.addEventListener('mousedown', function (evt) {
 
@@ -16,16 +25,6 @@ window.map = (function () {
 
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
-
-      // размеры пина
-      var pinSizes = {
-        WIDTH: 75,
-        HEIGHT: 94
-      };
-
-      // высоты хедера и панели с фильтром
-      var HEADER_HEIGHT = 71;
-      var FILTER_PANEL_HEIGHT = 46;
 
       // при каждом движении мыши обновляем координаты пина
       var shift = {
@@ -72,6 +71,7 @@ window.map = (function () {
       var valueY = pinY + pinSizes.HEIGHT;
 
       addressField.value = 'x: ' + valueX + ', y: ' + valueY;
+      addressField.classList.remove('invalid');
     };
 
     var mouseUpHandler = function (upEvt) {

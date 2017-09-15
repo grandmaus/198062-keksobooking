@@ -1,8 +1,8 @@
 'use strict';
 
 window.filters = (function () {
-
   var map = document.querySelector('.tokyo');
+  var offerDialog = map.querySelector('#offer-dialog');
   var pinsContainer = map.querySelector('.tokyo__pin-map');
   var pinMain = map.querySelector('.pin__main');
   var filterForm = map.querySelector('.tokyo__filters');
@@ -19,7 +19,7 @@ window.filters = (function () {
     var fragment = document.createDocumentFragment();
 
     array.forEach(function (pin) {
-      fragment.appendChild(window.pin.createPin(pin));
+      fragment.appendChild(window.pin.create(pin));
     });
 
     return fragment;
@@ -27,6 +27,7 @@ window.filters = (function () {
 
   // функция очищает карту от всех пинов, кроме pin_main
   var clearMap = function () {
+    offerDialog.classList.add('hidden');
     pinsContainer.innerHTML = '';
     pinsContainer.appendChild(pinMain);
   };
@@ -62,7 +63,7 @@ window.filters = (function () {
 
     [].forEach.call(housingFeaturesChecked, function (checkbox) {
       filteredOffers = filteredOffers.filter(function (offerItem) {
-        return offerItem.offer.features.includes(checkbox.value);
+        return ~offerItem.offer.features.indexOf(checkbox.value);
       });
     });
 
@@ -71,6 +72,7 @@ window.filters = (function () {
     selectPropertyFilter(guests, 'guests');
 
     clearMap();
+    // window.card.hide();
     pinsContainer.appendChild(createPinFragment(filteredOffers));
   };
 

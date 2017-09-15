@@ -23,7 +23,7 @@ window.card = (function () {
     var description = lodgeElement.querySelector('.lodge__description');
 
     // объект для перевода типов жилья на русский язык
-    var typesRu = {
+    var offerTypes = {
       flat: 'Квартира',
       house: 'Дом',
       bungalo: 'Бунгало'
@@ -32,7 +32,7 @@ window.card = (function () {
     title.textContent = ad.offer.title;
     address.textContent = ad.offer.address;
     price.textContent = ad.offer.price + ' \u20bd/ночь';
-    type.textContent = typesRu[ad.offer.type];
+    type.textContent = offerTypes[ad.offer.type];
     guests.textContent = 'Для ' + ad.offer.guests + ' гостей в ' + ad.offer.rooms + ' комнатах';
     checkIn.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
     description.textContent = ad.offer.description;
@@ -48,48 +48,48 @@ window.card = (function () {
     userAvatar.setAttribute('src', ad.author.avatar);
   };
 
-  var dialogEnterCloseHandler = function (evt) {
+  var closeEnterDialogHandler = function (evt) {
     if (window.utils.isEnterPressed(evt.keyCode)) {
-      dialogCloseHandler();
+      closeDialogHandler();
     }
   };
 
-  var dialogEscCloseHandler = function (evt) {
+  var closeEscDialogHandler = function (evt) {
     if (window.utils.isEscPressed(evt.keyCode)) {
-      dialogCloseHandler();
+      closeDialogHandler();
     }
   };
 
-  var dialogAddListeners = function () {
-    dialogClose.addEventListener('click', dialogCloseHandler);
-    dialogClose.addEventListener('keydown', dialogEnterCloseHandler);
-    document.addEventListener('keydown', dialogEscCloseHandler);
+  var addDialogListeners = function () {
+    dialogClose.addEventListener('click', closeDialogHandler);
+    dialogClose.addEventListener('keydown', closeEnterDialogHandler);
+    document.addEventListener('keydown', closeEscDialogHandler);
   };
 
-  var dialogRemoveListeners = function () {
-    dialogClose.removeEventListener('click', dialogCloseHandler);
-    dialogClose.removeEventListener('keydown', dialogEnterCloseHandler);
-    document.removeEventListener('keydown', dialogEscCloseHandler);
+  var removeDialogListeners = function () {
+    dialogClose.removeEventListener('click', closeDialogHandler);
+    dialogClose.removeEventListener('keydown', closeEnterDialogHandler);
+    document.removeEventListener('keydown', closeEscDialogHandler);
   };
 
-  var dialogCloseHandler = function () {
-    hideDialog();
-    window.pin.deactivatePin();
+  var closeDialogHandler = function () {
+    hide();
+    window.pin.deactivate();
   };
 
   // добавляет попапу класс hidden
-  var hideDialog = function () {
+  var hide = function () {
     offerDialog.classList.add('hidden');
-    dialogRemoveListeners();
+    removeDialogListeners();
   };
 
-  hideDialog();
+  hide();
 
   return {
     // убирает у попапа класс hidden
     show: function (ad) {
       offerDialog.classList.remove('hidden');
-      dialogAddListeners();
+      addDialogListeners();
       insertAdInformation(ad);
     }
   };

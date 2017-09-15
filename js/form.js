@@ -4,7 +4,6 @@ window.form = (function () {
   // перемнные для валидации формы
   var form = document.querySelector('.notice__form');
   var titleField = form.querySelector('#title');
-  var addressField = form.querySelector('#address');
   var priceField = form.querySelector('#price');
   var timeinField = form.querySelector('#timein');
   var timeoutField = form.querySelector('#timeout');
@@ -52,7 +51,6 @@ window.form = (function () {
     form.addEventListener('invalid', validationInputHandler, true);
 
     titleField.addEventListener('input', validationInputHandler);
-    addressField.addEventListener('input', validationInputHandler);
     priceField.addEventListener('input', validationInputHandler);
   };
 
@@ -67,16 +65,11 @@ window.form = (function () {
   };
 
   // функция для связывания количества комнат и гостей
-  var syncCapacityHandler = function () {
-    roomField.addEventListener('change', function (evt) {
-      var currentValue = evt.target.value;
-
-      [].forEach.call(optionsArray, function (element) {
-        var value = element.value;
-        // если элемент не найден, то disabled = true
-        element.disabled = !~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
-        element.selected = ~ROOMS_CAPACITY_MAP[currentValue].indexOf(value);
-      });
+  var syncCapacityHandler = function (currentField, changedField, currentFieldArray) {
+    [].forEach.call(changedField, function (element) {
+      // если элемент не найден, то disabled = true
+      element.disabled = !~currentFieldArray[currentField.value].indexOf(element.value);
+      element.selected = ~currentFieldArray[currentField.value].indexOf(element.value);
     });
   };
 
@@ -95,8 +88,6 @@ window.form = (function () {
       element.classList.remove('invalid');
     });
 
-    priceField.min = 0;
-
     form.reset();
   };
 
@@ -112,13 +103,15 @@ window.form = (function () {
 
     form.addEventListener('submit', submitFormHandler);
 
-    syncCapacityHandler();
+    syncCapacityHandler(roomField, optionsArray, ROOMS_CAPACITY_MAP);
+    syncPriceHandler(typeField, priceField, TYPE_VALUES, PRICE_VALUES);
   };
 
 
   window.synchronizeFields(timeinField, timeoutField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
   window.synchronizeFields(timeoutField, timeinField, TIME_VALUES, TIME_VALUES, syncFieldHandler);
   window.synchronizeFields(typeField, priceField, TYPE_VALUES, PRICE_VALUES, syncPriceHandler);
+  window.synchronizeFields(roomField, optionsArray, ROOMS_CAPACITY_MAP, ROOMS_CAPACITY_MAP, syncCapacityHandler);
 
   addFormListeners();
 })();

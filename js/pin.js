@@ -7,11 +7,11 @@ window.pin = (function () {
     var pinFragment = pinTemplate.cloneNode(true);
     var pinElement = pinFragment.querySelector('.pin');
     // размеры метки
-    var pinWidth = 56;
-    var pinHeight = 75;
+    var PIN_WIDTH = 56;
+    var PIN_HEIGHT = 75;
     // по оси x отнимаем половину ширины, по оси y высоту, чтобы на координату указывал острый конец маркера
-    var pinCoordinateX = 'left: ' + (ad.location.x - pinWidth / 2) + 'px';
-    var pinCoordinateY = 'top: ' + (ad.location.y - pinHeight) + 'px';
+    var pinCoordinateX = 'left: ' + (ad.location.x - PIN_WIDTH / 2) + 'px';
+    var pinCoordinateY = 'top: ' + (ad.location.y - PIN_HEIGHT) + 'px';
     // аватарка пина
     var pinImage = pinElement.querySelector('.rounded');
 
@@ -36,20 +36,21 @@ window.pin = (function () {
   };
 
   var pinClickHandler = function (evt, ad) {
-    window.pin.deactivatePin();
+    window.pin.deactivate();
     evt.currentTarget.classList.add('pin--active');
     window.card.show(ad);
   };
 
   return {
-    createPin: function (ad) {
+    create: function (ad) {
       var pin = renderPin(ad);
       pinHandlersAdd(pin, ad);
+
       return pin;
     },
 
     // функция деактивирует пин
-    deactivatePin: function () {
+    deactivate: function () {
       var pinActive = document.querySelector('.pin--active');
 
       if (pinActive) {
