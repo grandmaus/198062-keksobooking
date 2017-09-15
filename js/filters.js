@@ -72,7 +72,6 @@ window.filters = (function () {
     selectPropertyFilter(guests, 'guests');
 
     clearMap();
-    // window.card.hide();
     pinsContainer.appendChild(createPinFragment(filteredOffers));
   };
 

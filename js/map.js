@@ -1,6 +1,10 @@
 'use strict';
 
 window.map = (function () {
+  // высоты хедера и панели с фильтром
+  var HEADER_HEIGHT = 71;
+  var FILTER_PANEL_HEIGHT = 46;
+
   var map = document.querySelector('.tokyo');
   var pinMain = map.querySelector('.pin__main');
   var addressField = document.querySelector('#address');
@@ -10,10 +14,6 @@ window.map = (function () {
     WIDTH: 75,
     HEIGHT: 94
   };
-
-  // высоты хедера и панели с фильтром
-  var HEADER_HEIGHT = 71;
-  var FILTER_PANEL_HEIGHT = 46;
 
   pinMain.addEventListener('mousedown', function (evt) {
 

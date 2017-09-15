@@ -1,14 +1,15 @@
 'use strict';
 
 window.pin = (function () {
+  // размеры метки
+  var PIN_WIDTH = 56;
+  var PIN_HEIGHT = 75;
+
   var pinTemplate = document.querySelector('#pin-template').content;
 
   var renderPin = function (ad) {
     var pinFragment = pinTemplate.cloneNode(true);
     var pinElement = pinFragment.querySelector('.pin');
-    // размеры метки
-    var PIN_WIDTH = 56;
-    var PIN_HEIGHT = 75;
     // по оси x отнимаем половину ширины, по оси y высоту, чтобы на координату указывал острый конец маркера
     var pinCoordinateX = 'left: ' + (ad.location.x - PIN_WIDTH / 2) + 'px';
     var pinCoordinateY = 'top: ' + (ad.location.y - PIN_HEIGHT) + 'px';

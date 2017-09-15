@@ -1,13 +1,13 @@
 'use strict';
 
 window.utils = (function () {
+  var DEBOUNCE_INTERVAL = 500; // ms
+  var lastTimeout;
+
   var keyCodes = {
     ESC: 27,
     ENTER: 13
   };
-
-  var DEBOUNCE_INTERVAL = 500; // ms
-  var lastTimeout;
 
   return {
     isEscPressed: function (keyCode) {

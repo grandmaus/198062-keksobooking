@@ -48,42 +48,42 @@ window.card = (function () {
     userAvatar.setAttribute('src', ad.author.avatar);
   };
 
-  var closeEnterDialogHandler = function (evt) {
+  var dialogCloseByEnterHandler = function (evt) {
     if (window.utils.isEnterPressed(evt.keyCode)) {
-      closeDialogHandler();
+      dialogCloseHandler();
     }
   };
 
-  var closeEscDialogHandler = function (evt) {
+  var dialogCloseByEscHandler = function (evt) {
     if (window.utils.isEscPressed(evt.keyCode)) {
-      closeDialogHandler();
+      dialogCloseHandler();
     }
   };
 
   var addDialogListeners = function () {
-    dialogClose.addEventListener('click', closeDialogHandler);
-    dialogClose.addEventListener('keydown', closeEnterDialogHandler);
-    document.addEventListener('keydown', closeEscDialogHandler);
+    dialogClose.addEventListener('click', dialogCloseHandler);
+    dialogClose.addEventListener('keydown', dialogCloseByEnterHandler);
+    document.addEventListener('keydown', dialogCloseByEscHandler);
   };
 
   var removeDialogListeners = function () {
-    dialogClose.removeEventListener('click', closeDialogHandler);
-    dialogClose.removeEventListener('keydown', closeEnterDialogHandler);
-    document.removeEventListener('keydown', closeEscDialogHandler);
+    dialogClose.removeEventListener('click', dialogCloseHandler);
+    dialogClose.removeEventListener('keydown', dialogCloseByEnterHandler);
+    document.removeEventListener('keydown', dialogCloseByEscHandler);
   };
 
-  var closeDialogHandler = function () {
-    hide();
+  var dialogCloseHandler = function () {
+    hideDialog();
     window.pin.deactivate();
   };
 
   // добавляет попапу класс hidden
-  var hide = function () {
+  var hideDialog = function () {
     offerDialog.classList.add('hidden');
     removeDialogListeners();
   };
 
-  hide();
+  hideDialog();
 
   return {
     // убирает у попапа класс hidden
