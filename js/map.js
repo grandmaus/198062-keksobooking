@@ -1,6 +1,6 @@
 'use strict';
 
-window.map = (function () {
+(function () {
   // высоты хедера и панели с фильтром
   var HEADER_HEIGHT = 71;
   var FILTER_PANEL_HEIGHT = 46;
@@ -10,7 +10,7 @@ window.map = (function () {
   var addressField = document.querySelector('#address');
 
   // размеры пина
-  var pinSizes = {
+  var pinSize = {
     WIDTH: 75,
     HEIGHT: 94
   };
@@ -32,9 +32,9 @@ window.map = (function () {
         y: startCoordinates.y - moveEvt.clientY
       };
 
-      var maxCoordinateX = map.clientWidth - pinSizes.WIDTH / 2;
-      var minCoordinateX = 0 - pinSizes.WIDTH / 2;
-      var maxCoordinateY = map.clientHeight - pinSizes.HEIGHT - FILTER_PANEL_HEIGHT;
+      var maxCoordinateX = map.clientWidth - pinSize.WIDTH / 2;
+      var minCoordinateX = 0 - pinSize.WIDTH / 2;
+      var maxCoordinateY = map.clientHeight - pinSize.HEIGHT - FILTER_PANEL_HEIGHT;
       var minCoordinateY = 0 + HEADER_HEIGHT;
 
       var pinY = pinMain.offsetTop - shift.y;
@@ -67,8 +67,8 @@ window.map = (function () {
       pinMain.style.top = pinY + 'px';
       pinMain.style.left = pinX + 'px';
 
-      var valueX = pinX + pinSizes.WIDTH / 2;
-      var valueY = pinY + pinSizes.HEIGHT;
+      var valueX = pinX + pinSize.WIDTH / 2;
+      var valueY = pinY + pinSize.HEIGHT;
 
       addressField.value = 'x: ' + valueX + ', y: ' + valueY;
       addressField.classList.remove('invalid');

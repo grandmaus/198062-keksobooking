@@ -1,6 +1,6 @@
 'use strict';
 
-window.utils = (function () {
+(function () {
   var DEBOUNCE_INTERVAL = 500; // ms
   var lastTimeout;
 
@@ -9,7 +9,7 @@ window.utils = (function () {
     ENTER: 13
   };
 
-  return {
+  window.utils = {
     isEscPressed: function (keyCode) {
       return keyCode === keyCodes.ESC;
     },

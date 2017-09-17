@@ -1,6 +1,6 @@
 'use strict';
 
-window.form = (function () {
+(function () {
   // перемнные для валидации формы
   var form = document.querySelector('.notice__form');
   var titleField = form.querySelector('#title');
@@ -67,9 +67,11 @@ window.form = (function () {
   // функция для связывания количества комнат и гостей
   var syncCapacityHandler = function (currentField, changedField, currentFieldArray) {
     [].forEach.call(changedField, function (element) {
+      var findElementInArray = currentFieldArray[currentField.value].indexOf(element.value);
+
       // если элемент не найден, то disabled = true
-      element.disabled = !~currentFieldArray[currentField.value].indexOf(element.value);
-      element.selected = ~currentFieldArray[currentField.value].indexOf(element.value);
+      element.disabled = !~findElementInArray;
+      element.selected = ~findElementInArray;
     });
   };
 

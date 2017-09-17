@@ -1,6 +1,6 @@
 'use strict';
 
-window.card = (function () {
+(function () {
   // переменные для вывода информации на страницу
   var offerDialog = document.querySelector('#offer-dialog');
   var lodgeTemplate = document.querySelector('#lodge-template').content;
@@ -85,7 +85,7 @@ window.card = (function () {
 
   hideDialog();
 
-  return {
+  window.card = {
     // убирает у попапа класс hidden
     show: function (ad) {
       offerDialog.classList.remove('hidden');

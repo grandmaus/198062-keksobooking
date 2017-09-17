@@ -1,6 +1,6 @@
 'use strict';
 
-window.backend = (function () {
+(function () {
   var URL = 'https://1510.dump.academy/keksobooking';
 
   var setup = function (onLoad, onError) {
@@ -46,7 +46,7 @@ window.backend = (function () {
     return xhr;
   };
 
-  return {
+  window.backend = {
     save: function (data, onLoad, onError) {
       var xhr = setup(onLoad, onError);
 

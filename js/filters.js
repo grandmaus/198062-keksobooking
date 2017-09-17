@@ -1,6 +1,6 @@
 'use strict';
 
-window.filters = (function () {
+(function () {
   var map = document.querySelector('.tokyo');
   var offerDialog = map.querySelector('#offer-dialog');
   var pinsContainer = map.querySelector('.tokyo__pin-map');
@@ -83,5 +83,5 @@ window.filters = (function () {
     window.utils.debounce(callUpdatePins);
   });
 
-  return updatePins;
+  window.filters = updatePins;
 })();

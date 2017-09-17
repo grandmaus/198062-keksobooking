@@ -1,9 +1,11 @@
 'use strict';
 
-window.pin = (function () {
+(function () {
   // размеры метки
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
+
+  var pinActive;
 
   var pinTemplate = document.querySelector('#pin-template').content;
 
@@ -24,7 +26,7 @@ window.pin = (function () {
   };
 
   // добавляет обработчики на пины
-  var pinHandlersAdd = function (pin, ad) {
+  var addPinHandlers = function (pin, ad) {
     pin.addEventListener('click', function (evt) {
       pinClickHandler(evt, ad);
     });
@@ -38,22 +40,21 @@ window.pin = (function () {
 
   var pinClickHandler = function (evt, ad) {
     window.pin.deactivate();
+    pinActive = evt.currentTarget;
     evt.currentTarget.classList.add('pin--active');
     window.card.show(ad);
   };
 
-  return {
+  window.pin = {
     create: function (ad) {
       var pin = renderPin(ad);
-      pinHandlersAdd(pin, ad);
+      addPinHandlers(pin, ad);
 
       return pin;
     },
 
     // функция деактивирует пин
     deactivate: function () {
-      var pinActive = document.querySelector('.pin--active');
-
       if (pinActive) {
         pinActive.classList.remove('pin--active');
       }
