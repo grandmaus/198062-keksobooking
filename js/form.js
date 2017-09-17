@@ -67,11 +67,11 @@
   // функция для связывания количества комнат и гостей
   var syncCapacityHandler = function (currentField, changedField, currentFieldArray) {
     [].forEach.call(changedField, function (element) {
-      var findElementInArray = currentFieldArray[currentField.value].indexOf(element.value);
+      var capacityOption = currentFieldArray[currentField.value].indexOf(element.value);
 
       // если элемент не найден, то disabled = true
-      element.disabled = !~findElementInArray;
-      element.selected = ~findElementInArray;
+      element.disabled = !~capacityOption;
+      element.selected = ~capacityOption;
     });
   };
 
